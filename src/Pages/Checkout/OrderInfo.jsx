@@ -247,7 +247,15 @@ function productItem(item) {
         "font-weight": 600,
       }}
     >
-      <span className="flex-grow-1" style={{ color: "var(--primary)" }}>
+      <span
+        className="align-items-center d-flex flex-grow-1 gap-2"
+        style={{ color: "var(--primary)" }}
+      >
+        <img
+          src={process.env.REACT_APP_API_URL + item.img}
+          alt="thumbnail"
+          style={{ height: "32px", width: "32px", borderRadius: "4px" }}
+        />
         {item[nameTarget] || name}
       </span>
       <span>x {quantity}</span>
@@ -264,6 +272,7 @@ function extractData(i, restaurant_id) {
   return {
     name: i[nameTarget] || name,
     restaurant_id: +restaurant_id,
+    img: i.img,
     id: emptyStr + id,
     price: emptyStr + price,
     quantity: emptyStr + i.quantity,

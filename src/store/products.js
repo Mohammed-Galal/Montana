@@ -1,11 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-window.localStorage.getItem("slug");
 
-const customOrderExp = new RegExp(
+
+const slug = window.localStorage.getItem("slug"),
+  customOrderExp = new RegExp(
     [
       "اليوم الوطني",
-      "يوم ميلاد",
+      "يوم الميلاد",
+      "مناسبات أعياد",
+      "مناسبات رياضية",
+      "مناسبات عامة",
       "تخرج أو نجاح",
       "هدية لأطفالك",
       "زفاف",
@@ -13,16 +17,14 @@ const customOrderExp = new RegExp(
       "الطلبات الخاصة",
     ].join("|")
   ),
-  cartStorage = JSON.parse(window.localStorage.getItem("cartItems")) || {},
-  cartMsg =
-    "لا يمكن اضافة الطلب المخصص الى العربة بجانب الطلبات الأخرى، هل تريد إخلاء العربة؟";
+  cartStorage = JSON.parse(window.localStorage.getItem("cartItems")) || {};
 
 const Products = {
     name: "products",
     initialState: {
       loaded: false,
-      is_special: (cartStorage[window.localStorage.getItem("slug")] || []).some(
-        (item) => customOrderExp.test(item.category_name)
+      is_special: !(cartStorage[slug] || []).some((item) =>
+        [1, 2, 3, 4, 5, 6, 7].includes(item.category_id)
       ),
       early_booking: [],
       custom: [],
@@ -73,20 +75,11 @@ reducers.addToCart = function (state, { payload }) {
     return;
   }
 
-  const isSpecialItem = customOrderExp.test(payload.category_name),
+  const isSpecialItem = payload.category_id > 7,
     clearCart =
       state.cart.length &&
       ((isSpecialItem && !state.is_special) ||
         (!isSpecialItem && state.is_special));
-
-  if (clearCart) {
-    const proceedToClear = window.confirm(cartMsg);
-    if (!proceedToClear) return;
-    state.cart = [];
-    const slug = window.localStorage.getItem("slug");
-    cartStorage[slug] = state.cart;
-    window.localStorage.setItem("cartItems", JSON.stringify(cartStorage));
-  }
 
   state.is_special = isSpecialItem;
 

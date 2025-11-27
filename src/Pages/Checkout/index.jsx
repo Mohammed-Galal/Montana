@@ -10,7 +10,6 @@ import OrderInfo from "./OrderInfo";
 import "./index.scss";
 
 const getText = getPage("checkout"),
-  customOrderExp = /الحجز المبكر|الطلبات الخاصة/,
   complimentaryData = {},
   placeOrderApi = process.env.REACT_APP_API_URL + "/public/api/place-order",
   days = [/^sun/i, /^mon/i, /^tue/i, /^wed/i, /^thu/i, /^fri/i, /^sat/i],
@@ -51,7 +50,6 @@ export default function () {
     }).current;
 
   reqBody.is_special = clues.isExceptionalCart = is_special;
-
   clues.deliveryCharges = store.Restaurant.data.delivery_charges;
 
   useLayoutEffect(function () {
@@ -139,7 +137,7 @@ export default function () {
         !reqBody.schedule_date &&
         !reqBody.schedule_slot
       ) {
-        alert("يرجى تحديد موعد الطلب!");
+        window.modalOptions.open("يرجى تحديد موعد الطلب!");
         return;
       }
     }
@@ -151,7 +149,6 @@ export default function () {
 
     Object.assign(reqBody, complimentaryData);
     appendFormData(formData, reqBody);
-    // debugger;
 
     if (images && images.length > 0) {
       for (let i = 0; i < images.length; i++)
@@ -282,7 +279,7 @@ function ClosestResPopup({ setDelivery, clues, dispatch, redirect }) {
                   // Redirect to the home page
                   redirect("/");
                 });
-            } else alert(getText(11));
+            } else window.modalOptions.open(getText(11));
 
             document.getElementById("closest-res").hidePopover();
           }}
@@ -395,9 +392,7 @@ function appendFormData(fd, data, parentKey = "") {
   }
 }
 
-function checkForExceptionalItems(cartItems) {
-  return cartItems.some((i) => customOrderExp.test(i.category_name));
-}
+
 
 Object.assign(complimentaryData, {
   tipAmount: "",

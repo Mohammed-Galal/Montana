@@ -4,6 +4,7 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.scss";
 import "./bootstrap.js";
+import "./Modal.jsx";
 import App from "./Pages";
 
 const root = document.querySelector("body > main"),
@@ -12,6 +13,7 @@ const root = document.querySelector("body > main"),
 initLangs(() => {
   ReactDOM.createRoot(root).render(App);
   setTimeout(removeAnimation, 1000);
+  console.clear();
 });
 
 function removeAnimation() {

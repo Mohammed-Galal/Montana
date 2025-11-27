@@ -52,8 +52,6 @@ export default function () {
       return false;
     });
 
-  debugger;
-
   if (data.length && !loaded) {
     setTimeout(() => setLoaded(true), 1000);
   }
@@ -68,7 +66,7 @@ export default function () {
       className="container d-flex flex-column flex-lg-row-reverse gap-5"
     >
       {!viewOccassions && (
-        <div style={{ flex: "1 0 30%", height: "fit-content" }}>
+        <div style={{ width: "100%", height: "fit-content" }}>
           <input
             type="search"
             placeholder={getText(0)}
@@ -116,13 +114,17 @@ export default function () {
       )}
 
       <div
-        className="d-flex flex-wrap gap-3 justify-content-between"
+        className="d-grid d-md-flex flex-wrap gap-4"
         style={{
           flex: "1 0 70%",
+          gridTemplateColumns: "1fr 1fr",
         }}
       >
         {params.has("occassions") && (
-          <h3 style={{ width: "100%", color: "var(--primary)" }}>{urlCat}</h3>
+          <>
+            <h3 style={{ width: "100%", color: "var(--primary)" }}>{urlCat}</h3>
+            <span className="d-lg-none"></span>
+          </>
         )}
         {loaded ? (
           items

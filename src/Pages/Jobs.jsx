@@ -415,12 +415,11 @@ function FileUpload({ fileRef }) {
           const file = e.target.files[0];
           if (file && file.size > 2 * 1024 * 1024) {
             e.target.value = "";
-            return alert(getText(19));
+            return window.modalOptions.open(getText(19));
           }
           setFileData(file);
         }}
       />
-
       {fileData ? (
         <div className="d-flex flex-column gap-2">
           <span style={{ color: "#676767", fontWeight: "700" }}>
@@ -472,11 +471,11 @@ function FileUpload({ fileRef }) {
               const file = e.dataTransfer.files[0];
               if (file && file.type === "application/pdf") {
                 if (file.size > 2 * 1024 * 1024) {
-                  return alert(getText(22));
+                  return window.modalOptions.open(getText(22));
                 }
                 setFileData(file);
               } else {
-                alert(getText(23));
+                window.modalOptions.open(getText(23));
               }
             }}
             className="align-items-center d-flex flex-column gap-2 py-3"

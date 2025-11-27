@@ -6,10 +6,40 @@ import Restaurant from "./restaurant.js";
 import Sliders from "./sliders.js";
 import settings from "./settings.js";
 
-const APP_STATE = configureStore({
-  reducer: { Products, User, Restaurant, Sliders, settings },
-});
+const cartMsg =
+    "لا يمكن اضافة الطلب المخصص الى العربة بجانب الطلبات الأخرى، هل تريد إخلاء العربة؟",
+  APP_STATE = configureStore({
+    reducer: { Products, User, Restaurant, Sliders, settings },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(cartValidation), // Add custom middleware here
+  });
 export default APP_STATE;
+
+function cartValidation(store) {
+  return (next) => (action) => {
+    if (action.type === "products/addToCart") {
+      const state = store.getState().Products,
+        cart = state.cart,
+        payload = action.payload;
+
+      const isSpecialItem = payload.category_id > 7,
+        clearCart =
+          cart.length &&
+          ((isSpecialItem && !state.is_special) ||
+            (!isSpecialItem && state.is_special));
+
+      if (!clearCart) return next(action);
+
+      window.modalOptions.open(cartMsg, function (proceedToClear) {
+        if (!proceedToClear) return;
+        APP_STATE.dispatch({ type: "products/clearCart" });
+        APP_STATE.dispatch(action);
+      });
+
+      return store.getState();
+    } else return next(action);
+  };
+}
 
 fetch(process.env.REACT_APP_API_URL + "/public/api/getItemcategories")
   .then((r) => r.json())
@@ -22,7 +52,9 @@ fetch(process.env.REACT_APP_API_URL + "/public/api/getItemcategories")
 
 navigator.geolocation.getCurrentPosition((POS) => {
   if (!("geolocation" in navigator))
-    return alert("Geolocation is not supported by your browser.");
+    return window.modalOptions.open(
+      "Geolocation is not supported by your browser."
+    );
 
   const coords = {
     latitude: "" + POS.coords.latitude,

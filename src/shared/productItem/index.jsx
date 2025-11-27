@@ -143,7 +143,6 @@ function ProductItem({ item, I }) {
           alt={item[nameTarget]}
           style={{
             aspectRatio: "var(--img-aspect-ratio)",
-            objectFit: "contain",
           }}
         />
       </Link>
@@ -254,12 +253,14 @@ function ProductItem({ item, I }) {
       payload: {
         slug: item.slug,
         quantity,
+        img: item.image,
         // is_special: item.category_name === "الحجز المبكر",
         restaurant_id: +restaurant_id,
         id: item.id,
         name: item.name,
         name_ar: item.name_ar,
         category_name: item.category_name,
+        category_id: item.item_category_id,
         price: +item.price,
         addons: emptyArr,
         // totalPrice: quantity * price,

@@ -45,7 +45,7 @@ function oItem({ name, image_url }) {
         <img
           src={image_url}
           alt={name}
-          style={{ width: "100%", height: "150px", objectFit: "fill" }}
+          // style={{ width: "100%", height: "150px", objectFit: "fill" }}
         />
       </div>
 

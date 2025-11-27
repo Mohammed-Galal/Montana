@@ -163,7 +163,7 @@ export default function () {
     })
       .then((r) => r.json())
       .then((r) => {
-        if (!r.success) return alert(r.data);
+        if (!r.success) return window.modalOptions.open(r.data);
         navigate("/user/resetPassword");
       });
   }
@@ -588,7 +588,7 @@ function handleUserData(r) {
   const failed = !r.success;
 
   if (failed) {
-    if (r.msg) alert(r.msg);
+    if (r.msg) window.modalOptions.open(r.msg);
     else {
       const infoEl = r.email_phone_already_used
         ? "used-account"

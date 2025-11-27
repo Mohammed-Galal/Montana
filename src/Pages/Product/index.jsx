@@ -17,11 +17,13 @@ const getText = getPage("product"),
   isArabic = getActiveLang() === "العربية",
   priceTypes = window.priceTypes,
   hiddenAlert = { opacity: 0, transform: "translateY(100%)" },
-  activeAlert = { opacity: 1, transform: "translateY(0)" },
+  activeAlert = {
+    opacity: 1,
+    visibility: "visible",
+    transform: "translateY(0)",
+  },
   baseUrl = process.env.REACT_APP_API_URL,
   docFrag = document.createElement("div");
-
-let isEarlyBooking = false;
 
 export default function () {
   const Products = useSelector(($) => $.Products),
@@ -30,15 +32,19 @@ export default function () {
     isCustom = query.get("isCustom");
 
   const productId = parseInt(id),
-    items = !!+isCustom ? Products.early_booking : Products.data,
+    items = Products.data,
     state = items.find((e) => e.id === productId);
 
-  isEarlyBooking = !!+isCustom;
+  if (!state) return null;
 
   return (
     <>
-      {state && <ProductInfo {...state} />}
-      <Related items={items} />
+      <ProductInfo {...state} />
+      <Related
+        items={Products.data}
+        exclude={state.id}
+        categoryID={state.item_category_id}
+      />
     </>
   );
 }
@@ -151,6 +157,7 @@ function ProductInfo(state) {
         className="alert m-0"
         style={{
           ...alertState,
+          visibility: "hidden",
           opacity: "0",
           transform: "translateY(100%)",
           width: "100%",
@@ -200,10 +207,12 @@ function ProductInfo(state) {
           {+state.price < old_price && discountFlag}
         </div>
 
-        <p
+        <div
           className="desc w-100"
-          dangerouslySetInnerHTML={{ __html: docFrag.textContent }}
-        ></p>
+          dangerouslySetInnerHTML={{
+            __html: docFrag.querySelector("td")?.innerHTML,
+          }}
+        ></div>
 
         {old_price > 0 && +state.price < old_price && (
           <div>
@@ -340,16 +349,17 @@ function ProductInfo(state) {
       }
     );
 
-    //
     dispatch({
       type: "products/addToCart",
       payload: {
         id: state.id,
         // is_special: isEarlyBooking,
+        img: state.image,
         name: state.name,
         slug: state.slug,
         name_ar: state.name_ar,
         category_name: state.category_name,
+        category_id: state.item_category_id,
         price: +state.price,
         restaurant_id: +resId,
         quantity,
@@ -382,8 +392,10 @@ function AddonItem(ADD, toggleAddon, isAdded) {
   );
 }
 
-function Related({ items }) {
-  items && (items = items.filter((i) => i.is_popular));
+function Related({ items, exclude, categoryID }) {
+  items = items.filter(
+    (i) => i.item_category_id === categoryID && i.id !== exclude
+  );
 
   return (
     <section id="related" className="container mb-5">

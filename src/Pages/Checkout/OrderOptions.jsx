@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import getPage from "../../translation.js";
@@ -14,6 +14,8 @@ const getText = getPage("checkout"),
     border: "2px solid #a8d0ec",
     borderRadius: "8px",
   };
+
+let prevActiveAddress = null;
 
 export default function ({
   deliveryState,
@@ -37,9 +39,9 @@ export default function ({
       dispatch({ type: "user/setActiveAddress", payload: indx });
     };
 
-  useEffect(() => {
-    userAddresses.length && fetchDeliveryRestaurants();
-  }, [activeAddress]);
+  useLayoutEffect(() => {
+    delivery && userAddresses.length && fetchDeliveryRestaurants();
+  }, [activeAddress, delivery]);
 
   if (delivery) {
     reqBody.delivery_type = "1";
@@ -271,6 +273,9 @@ export default function ({
   function fetchDeliveryRestaurants() {
     const address = userAddresses[activeAddress];
 
+    if (activeAddress === prevActiveAddress) return;
+    prevActiveAddress = activeAddress;
+
     fetch(
       `${process.env.REACT_APP_API_URL}/public/api/get-delivery-restaurants`,
       {
@@ -283,19 +288,21 @@ export default function ({
       .then((data) => {
         const activeStores = data.filter((s) => !!s.is_active);
 
-        if (activeStores.length === 0) {
-          const prompt = window.confirm(
-            "لا توجد فروع قريبة منك، هل تريد استلام الطلب من الفرع ؟"
+        if (activeStores.length > 0) {
+          const minDistance = Math.min(
+            ...activeStores.map(({ distance }) => distance)
           );
-          if (prompt) setDelivery(false);
-          return;
+          clues.closestRes = minDistance
+            ? activeStores.find(({ distance }) => distance === minDistance)
+            : false;
+        } else {
+          clues.closestRes = false;
+
+          window.modalOptions.open(
+            "لا توجد فروع قريبة منك، هل تريد استلام الطلب من الفرع ؟",
+            (isOk) => isOk && setDelivery(false)
+          );
         }
-        const minDistance = Math.min(
-          ...activeStores.map(({ distance }) => distance)
-        );
-        clues.closestRes = minDistance
-          ? activeStores.find(({ distance }) => distance === minDistance)
-          : false;
       });
   }
 }

@@ -2,8 +2,7 @@
   & > div {
     & > div {
       border-radius: 12px;
-      width: 100%;
-      max-width: calc(1296px / 2);
+      flex: 1 1 648px;
       background-color: aliceblue;
       padding: 1rem 1.5rem;
       gap: calc(var(--bs-gutter-x) * 0.5);

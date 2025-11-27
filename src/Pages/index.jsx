@@ -46,9 +46,7 @@ function updateMetaElData(data, value) {
   try {
     currEl.setAttribute(data.keyName, data[data.keyName]);
     currEl.setAttribute("content", value);
-  } catch {
-    // debugger;
-  }
+  } catch {}
 }
 
 const activeLang = getActiveLang(),
@@ -93,6 +91,7 @@ const getText = getPage("popup"),
 
 isMobileView && (body.id = "mobile");
 body.prepend(header);
+
 
 let pageTitles = null;
 

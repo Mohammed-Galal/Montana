@@ -108,6 +108,7 @@ function ChangeNonOTPData({ userData }) {
           />
         </label>
       )}
+
       <label>
         {getText(40)}
         <input
@@ -120,19 +121,34 @@ function ChangeNonOTPData({ userData }) {
 
       <span className="text-danger text-center">{err}</span>
 
-      <button
-        type="button"
-        className="btn mt-5"
-        onClick={updateUserData}
-        style={{
-          backgroundColor: "var(--primary)",
-          color: "#fff",
-          width: "100%",
-          borderRadius: "24px",
-        }}
-      >
-        {getText(39)}
-      </button>
+      <div className="d-flex flex-column gap-3 mt-4">
+        <button
+          type="button"
+          className="btn"
+          onClick={updateUserData}
+          style={{
+            backgroundColor: "var(--primary)",
+            color: "#fff",
+            width: "100%",
+            borderRadius: "0.375rem",
+          }}
+        >
+          {getText(39)}
+        </button>
+
+        <button
+          type="button"
+          className="btn btn-outline-danger w-100"
+          onClick={() =>
+            window.modalOptions.open(
+              "هل ترغب حقاً في حذف الحساب ؟",
+              console.log
+            )
+          }
+        >
+          {"حذف الحساب"}
+        </button>
+      </div>
     </div>
   );
 
@@ -269,3 +285,5 @@ function ChangePhoneNumber({ userData }) {
       });
   }
 }
+
+

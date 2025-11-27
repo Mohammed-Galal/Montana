@@ -1,11 +1,12 @@
-.swiper-slide {
+.swiper-slide:has(.product-item) {
   // height: unset !important;
-  width: auto !important;
+  // width: auto !important;
+  flex: 0 0 280px;
 }
 
 div.product-item {
-  flex: 1 1 auto;
-  max-width: 280px;
+  flex: 0 1 280px;
+  // max-width: 280px;
   // height: 100%;
   overflow: hidden;
   border-radius: 16px;

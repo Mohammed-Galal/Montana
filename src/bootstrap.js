@@ -1,4 +1,4 @@
-const version = "11.1.20",
+const version = "12.0.00",
   activeVer = window && window.localStorage.getItem("ver");
 
 window.priceTypes = {

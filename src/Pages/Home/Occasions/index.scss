@@ -17,9 +17,9 @@
         max-width: 175px;
 
         img {
-          width: 100%;
-          max-height: 150px;
-          object-fit: fill;
+          // width: 100%;
+          // max-height: 150px;
+          // object-fit: fill;
           scale: 1;
           transition: scale var(--hover-transition);
         }
@@ -38,9 +38,9 @@
     & > [class^="swiper-button"] {
       width: unset;
       height: unset;
-      background-color: var(--primary);
+      background-color: #ecf5ff7a;
       border-radius: 4px;
-      color: #ecf5ff;
+      color: var(--primary);
       padding: 8px 10px;
       opacity: var(--controllers-opacity);
       transition: var(--hover-transition);
