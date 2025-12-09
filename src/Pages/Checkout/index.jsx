@@ -12,7 +12,6 @@ import "./index.scss";
 const getText = getPage("checkout"),
   complimentaryData = {},
   placeOrderApi = process.env.REACT_APP_API_URL + "/public/api/place-order",
-  days = [/^sun/i, /^mon/i, /^tue/i, /^wed/i, /^thu/i, /^fri/i, /^sat/i],
   exceptionalCategories = [undefined],
   emptyStr = "";
 
@@ -124,14 +123,7 @@ export default function () {
     else if (deliveryState[0] && !checkResCoverage(currRes, clues.closestRes))
       return;
 
-    if (
-      !!currRes.is_schedulable &&
-      !isWithinWorkingHours(currRes) &&
-      ignoreWorkingHours !== true
-    )
-      return document.getElementById("time-warning").showPopover();
-
-    if (currRes.is_schedulable && clues.isExceptionalCart) {
+    if (currRes.accept_scheduled_orders && clues.isExceptionalCart) {
       if (
         !reqBody.is_scheduled &&
         !reqBody.schedule_date &&
@@ -143,6 +135,7 @@ export default function () {
     }
 
     clues.requestSent = true;
+    setTimeout(() => (clues.requestSent = false), 1000);
 
     const images = reqBody.images || [],
       formData = new FormData();
@@ -355,29 +348,6 @@ function checkResCoverage(currRes, closestRes) {
   return true;
 }
 
-function isWithinWorkingHours({ workingHours }) {
-  if (workingHours) {
-    const currTime = new Date(),
-      day = days[currTime.getDay()];
-
-    const targetDay = Object.keys(workingHours).find((d) => day.test(d));
-
-    if (targetDay) {
-      const resData = workingHours[targetDay],
-        time = currTime.getTime(),
-        openingTime = resData.open.split(/\D/),
-        closingTime = resData.close.split(/\D/);
-
-      const validStart = currTime.setHours(openingTime[0], openingTime[1]),
-        validEnd = currTime.setHours(closingTime[0], closingTime[1]);
-
-      return time === Math.min(Math.max(time, validStart), validEnd);
-    }
-  }
-
-  return true;
-}
-
 function appendFormData(fd, data, parentKey = "") {
   if (data && typeof data === "object" && !Array.isArray(data)) {
     Object.keys(data).forEach((key) => {
@@ -391,8 +361,6 @@ function appendFormData(fd, data, parentKey = "") {
     fd.append(parentKey, data === null ? "" : data);
   }
 }
-
-
 
 Object.assign(complimentaryData, {
   tipAmount: "",

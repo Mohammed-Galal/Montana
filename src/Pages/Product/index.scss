@@ -1,6 +1,7 @@
 #product {
   gap: 12px;
 
+  
   & > div:first-child {
     gap: inherit;
 
@@ -13,11 +14,17 @@
       gap: inherit;
     }
   }
-
+  
   & > div:last-child {
     gap: 1rem;
     color: var(--midgray);
     text-align: justify;
+    
+    .desc *{
+      width: auto !important;
+      height: auto !important;
+      border: none !important;
+    }
 
     & > ul > li:last-child {
       color: var(--lightgray);

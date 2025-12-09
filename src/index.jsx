@@ -13,7 +13,7 @@ const root = document.querySelector("body > main"),
 initLangs(() => {
   ReactDOM.createRoot(root).render(App);
   setTimeout(removeAnimation, 1000);
-  console.clear();
+  // console.clear();
 });
 
 function removeAnimation() {

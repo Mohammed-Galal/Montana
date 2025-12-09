@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import NXT from "../../icons/NXT";
 import Recommended from "./Recommended";
 import "./index.scss";
+import CurrencySymbol from "../../CurrencySymbol";
 
 const mobileView = window.matchMedia("(max-width: 786px)");
 
@@ -105,7 +106,7 @@ function ItemsContainer({ cart, totalPrice, setErr, cashback, store }) {
         <span>
           <samp>{getText(13)}</samp>
           <samp>
-            {totalPrice} {getText(14)}
+            {totalPrice} <CurrencySymbol />
           </samp>
         </span>
 
@@ -113,7 +114,7 @@ function ItemsContainer({ cart, totalPrice, setErr, cashback, store }) {
           <span className="total">
             <samp>{getText(15)}</samp>
             <samp>
-              {-userWallet} {getText(14)}
+              {-userWallet} <CurrencySymbol />
             </samp>
           </span>
 
@@ -124,20 +125,24 @@ function ItemsContainer({ cart, totalPrice, setErr, cashback, store }) {
                 ? getText(17)
                 : -(
                     cashbackAmount + Math.abs(discountController[0])
-                  ).toLocaleString("en-US") +
-                  " " +
-                  getText(14)}
+                  ).toLocaleString("en-US") + " "}
+
+              <CurrencySymbol />
             </samp>
           </span>
         </div>
 
         <span className="total">
           <samp>{getText(18)}</samp>
-          {Math.max(
-            0,
-            -cashbackAmount + (totalPrice - userWallet) + +discountController[0]
-          ).toLocaleString("en-US") + " "}
-          {getText(14)}
+          <span style={{ marginInlineStart: "auto" }}>
+            {Math.max(
+              0,
+              -cashbackAmount +
+                (totalPrice - userWallet) +
+                +discountController[0]
+            ).toLocaleString("en-US") + " "}
+          </span>
+          <CurrencySymbol />
         </span>
 
         <Link className="btn" to="/checkout">
@@ -402,7 +407,7 @@ function MobileProductItem(item, I, editCart) {
           <span className="d-flex flex-column text-black">
             {item[nameTarget] || item.name}
             <small className="fw-lighter text-secondary">
-              {getText(6)}: {item.price} {getText(14)}
+              {getText(6)}: {item.price} <CurrencySymbol />
             </small>
           </span>
 
@@ -432,7 +437,7 @@ function MobileProductItem(item, I, editCart) {
               +
             </button>
           </div>
-          {item.price * item.quantity} {getText(14)}
+          {item.price * item.quantity} <CurrencySymbol />
         </div>
       </div>
     </li>
@@ -453,7 +458,7 @@ function DesktopProductItem(item, I, editCart) {
           <li key={a.addon_id} className="d-flex justify-content-center">
             {a.addon_name} -
             <span>
-              {a.price} {getText(14)}
+              {a.price} <CurrencySymbol />
             </span>
           </li>
         );
@@ -498,8 +503,8 @@ function DesktopProductItem(item, I, editCart) {
         </ul>
       </li>
 
-      <li className="item-price">
-        <span>{price}</span> {getText(14)}
+      <li className="item-price justify-content-center">
+        <span>{price}</span> <CurrencySymbol />
       </li>
 
       <li className="align-items-center d-flex gap-2 item-quantity justify-content-center">
@@ -512,8 +517,8 @@ function DesktopProductItem(item, I, editCart) {
         </button>
       </li>
 
-      <li className="item-total">
-        <span>{price * quantity}</span> {getText(14)}
+      <li className="item-total justify-content-center">
+        <span>{price * quantity}</span> <CurrencySymbol />
       </li>
     </React.Fragment>
   );
@@ -545,7 +550,7 @@ function CartCashback({ totalPrice, source }) {
         getText(26) +
         obj.value +
         " " +
-        (obj.type === "percentage" ? "%" : getText(14)) +
+        (obj.type === "percentage" ? "%" : <CurrencySymbol />) +
         getText(27)}
       <progress
         value={totalPrice}

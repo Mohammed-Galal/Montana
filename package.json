@@ -5,8 +5,9 @@
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@mui/material": "^7.1.2",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.6",
+    "@mui/material": "^7.3.6",
     "@mui/x-date-pickers": "^8.14.1",
     "@react-google-maps/api": "^2.20.6",
     "@reduxjs/toolkit": "^2.3.0",

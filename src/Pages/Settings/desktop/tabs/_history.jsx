@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import Carousel from "../../../../shared/Carousel";
 import { useMap } from "@vis.gl/react-google-maps";
 import { useMemo } from "react";
+import CurrencySymbol from "../../../../CurrencySymbol";
 
 const defaultColorTheme = {
     backgroundColor: "rgb(219 234 254)",
@@ -127,7 +128,7 @@ function orderItem(order) {
           {date}
           <span style={{ color: "#171c1a" }}>
             {"الإجمالي: "}
-            {price} {getText(20)}/ {quantity} {getText(21)}
+            {price} <CurrencySymbol />/ {quantity} {getText(21)}
           </span>
         </div>
 

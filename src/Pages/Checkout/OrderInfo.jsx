@@ -3,8 +3,10 @@ import { useStore } from "react-redux";
 import { calcWalletCashback } from "../Cart";
 import { _useCoupon } from "../Cart";
 import getPage from "../../translation";
+import CurrencySymbol from "../../CurrencySymbol";
 
 const getText = getPage("checkout"),
+  days = [/^sun/i, /^mon/i, /^tue/i, /^wed/i, /^thu/i, /^fri/i, /^sat/i],
   isArabic = window.localStorage.getItem("lang") === "العربية",
   nameTarget = isArabic ? "name_ar" : "name",
   emptyStr = "";
@@ -96,23 +98,28 @@ export default function (props) {
       <div>
         {getText(19)}
         <span style={{ color: "var(--primary)", fontWeight: "600" }}>
-          {subTotal} {getText(20)}
+          {subTotal} <CurrencySymbol />
         </span>
       </div>
 
       <div>
         {getText(26)}
         <span>
-          {-wallet_balance + " "} {getText(20)}
+          {-wallet_balance + " "} <CurrencySymbol />
         </span>
       </div>
 
       <div style={{ color: "var(--sec)" }}>
         {getText(21)}
         <span style={{ color: "inherit" }}>
-          {discountAmount === false
-            ? getText(22)
-            : -(Math.abs(discountAmount) + cashbackAmount) + " " + getText(20)}
+          {discountAmount === false ? (
+            getText(22)
+          ) : (
+            <>
+              {-(Math.abs(discountAmount) + cashbackAmount)}
+              <CurrencySymbol />
+            </>
+          )}
         </span>
       </div>
 
@@ -135,7 +142,7 @@ export default function (props) {
         </span>
 
         <span>
-          {delivery_charges} {getText(20)}
+          {delivery_charges} <CurrencySymbol />
         </span>
       </div>
 
@@ -143,7 +150,7 @@ export default function (props) {
         <div>
           {getText(25)}({settings.taxPercentage}%)
           <span>
-            {taxes.toLocaleString("en-US")} {getText(20)}
+            {taxes.toLocaleString("en-US")} <CurrencySymbol />
           </span>
         </div>
       )}
@@ -165,12 +172,12 @@ export default function (props) {
             }}
           >
             <del>
-              {totalBeforeDiscount.toLocaleString("en-US")} {getText(20)}
+              {totalBeforeDiscount.toLocaleString("en-US")} <CurrencySymbol />
             </del>
           </sub>
         )}
         <span>
-          {(totalPrice + taxes).toLocaleString("en-US")} {getText(20)}
+          {(totalPrice + taxes).toLocaleString("en-US")} <CurrencySymbol />
         </span>
       </div>
 
@@ -209,13 +216,27 @@ export default function (props) {
       )}
 
       {(!delivery || userAddresses.length > 0) && (
-        <button
-          type="button"
-          onClick={placeOrder}
-          className="btn mt-4 mx-auto w-100"
-        >
-          {getText(31)}
-        </button>
+        <>
+          {isWithinWorkingHours(currRes) ? (
+            <button
+              type="button"
+              onClick={placeOrder}
+              className="btn mt-4 mx-auto w-100"
+            >
+              {getText(31)}
+            </button>
+          ) : (
+            <>
+              <button className="btn w-100" disabled={true}>
+                {getText(14)}
+              </button>
+
+              <span className="small d-block text-center text-danger mt-3">
+                {getText(15)}
+              </span>
+            </>
+          )}
+        </>
       )}
     </div>
   );
@@ -260,7 +281,7 @@ function productItem(item) {
       </span>
       <span>x {quantity}</span>
       <span>
-        {price} {getText(20)}
+        {price} <CurrencySymbol />
       </span>
     </li>
   );
@@ -282,4 +303,27 @@ function extractData(i, restaurant_id) {
 
 function calcTaxes(price, percentage) {
   return (percentage / 100) * price;
+}
+
+function isWithinWorkingHours({ workingHours, is_schedulable }) {
+  if (is_schedulable && workingHours) {
+    const currTime = new Date(),
+      day = days[currTime.getDay()];
+
+    const targetDay = Object.keys(workingHours).find((d) => day.test(d));
+
+    if (targetDay) {
+      const resData = workingHours[targetDay],
+        time = currTime.getTime(),
+        openingTime = resData.open.split(/\D/),
+        closingTime = resData.close.split(/\D/);
+
+      const validStart = currTime.setHours(openingTime[0], openingTime[1]),
+        validEnd = currTime.setHours(closingTime[0], closingTime[1]);
+
+      return time === Math.min(Math.max(time, validStart), validEnd);
+    }
+  }
+
+  return true;
 }

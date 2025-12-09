@@ -4,6 +4,14 @@ import { Link } from "react-router-dom";
 import S, { getFavourites } from "../../store";
 import "./index.scss";
 import getPage, { getActiveLang } from "../../translation";
+import CurrencySymbol from "../../CurrencySymbol";
+import { Button } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
+
+import InfoOutlineRoundedIcon from "@mui/icons-material/InfoOutlineRounded";
+import DirectionsRunRoundedIcon from "@mui/icons-material/DirectionsRunRounded";
+import SpaRoundedIcon from "@mui/icons-material/SpaRounded";
+import EggRoundedIcon from "@mui/icons-material/EggRounded";
 
 const emptyArr = [],
   getText = getPage("productItem"),
@@ -48,7 +56,6 @@ function ProductItem({ item, I }) {
   const cartItemRef = store.Products.cart.find((i) => i.id === item.id);
 
   if (cartItemRef) {
-    // debugger;
     quantity = cartItemRef.quantity;
   }
 
@@ -109,7 +116,7 @@ function ProductItem({ item, I }) {
 
   const href =
     "/products/" +
-    item.slug +
+    (item.slug || "product-item") +
     "?id=" +
     item.id +
     "&isCustom=" +
@@ -188,7 +195,11 @@ function ProductItem({ item, I }) {
                 <del>{old_price}</del>
               </sub>
             )}
-            <span>{price + " " + getText(3)}</span> /{priceType}
+            <span>
+              {price} <CurrencySymbol />
+            </span>
+            /{priceType}
+            <Facts src={item} />
           </div>
         </Link>
       </div>
@@ -267,4 +278,28 @@ function ProductItem({ item, I }) {
       },
     });
   }
+}
+
+function Facts({ src }) {
+  return (
+    <Tooltip
+      placement="bottom"
+      title={
+        <ul
+          className="d-flex flex-column gap-1 m-0 px-3 py-1"
+          style={{ fontSize: "0.75rem", fontWeight: "600" }}
+        >
+          <li>68 دقائق</li>
+          <li>المكسرات ومنتجاتها</li>
+          <li>المكسرات ومنتجاتهاالفول السوداني ومنتجاته</li>
+          <li>جلوتين</li>
+          <li>البيض ومنتجاته</li>
+        </ul>
+      }
+    >
+      <InfoOutlineRoundedIcon
+        style={{ color: "var(--primary)", marginInlineStart: "auto" }}
+      />
+    </Tooltip>
+  );
 }

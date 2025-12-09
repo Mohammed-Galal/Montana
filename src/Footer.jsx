@@ -68,8 +68,12 @@ export default function () {
             <span className="h5 mb-3">{getText(4)}</span>
             <Link to="" className="mb-2">
               <img
-                style={{ width: "142px" }}
-                src="https://business-egy.com/assets/googleplay-9d43d8bd.jpg"
+                style={{
+                  width: "142px",
+                  maxHeight: "47.56px",
+                  objectFit: "cover",
+                }}
+                src="https://www.svgrepo.com/show/303139/google-play-badge-logo.svg"
                 alt="google Play"
               />
             </Link>

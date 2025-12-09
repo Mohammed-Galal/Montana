@@ -13,7 +13,7 @@ export default function ({ reqBody, isSpecial }) {
   reqBody.schedule_date = "";
   reqBody.schedule_slot = "";
 
-  if (!res.data.is_schedulable || !isSpecial) return null;
+  if (!res.data.accept_scheduled_orders || !isSpecial) return null;
 
   return (
     <label
@@ -52,6 +52,7 @@ export default function ({ reqBody, isSpecial }) {
                 onChange={handleTimeChange}
                 minDateTime={dayjs(moment().subtract(1, "days").toISOString())}
                 maxDateTime={dayjs(moment().add(7, "days").toISOString())}
+                minutesStep={30}
                 views={["year", "month", "day", "hours", "minutes"]}
               />
             </DemoItem>

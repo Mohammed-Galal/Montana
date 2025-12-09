@@ -139,14 +139,9 @@ function ChangeNonOTPData({ userData }) {
         <button
           type="button"
           className="btn btn-outline-danger w-100"
-          onClick={() =>
-            window.modalOptions.open(
-              "هل ترغب حقاً في حذف الحساب ؟",
-              console.log
-            )
-          }
+          onClick={() => window.modalOptions.open(getText(49), console.log)}
         >
-          {"حذف الحساب"}
+          {getText(48)}
         </button>
       </div>
     </div>

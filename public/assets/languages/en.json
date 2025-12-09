@@ -121,7 +121,9 @@
     "Confirm",
     "Please enter verification code",
     "Confirm",
-    "Phone number must be 9 digits"
+    "Phone number must be 9 digits",
+    "Delete Account",
+    "Do you really wish to DELETE your account ?"
   ],
   "about": [
     "Montana",
@@ -291,8 +293,8 @@
     "No Nearby Branch",
     "Choose Nearest Branch",
     "Timing Notification",
-    "This branch is currently closed. Please note the branch will not accept orders until official working hours start.",
-    "Do you still want to continue placing the order?",
+    "This branch is currently closed.",
+    "Please note the branch will not accept orders until official working hours start.",
     "Continue",
     "Cancel",
     "Order",

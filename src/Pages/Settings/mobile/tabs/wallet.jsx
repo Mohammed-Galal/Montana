@@ -1,4 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
+import CurrencySymbol from "../../../../CurrencySymbol";
 import getPage from "../../../../translation";
 import { useLayoutEffect, useState } from "react";
 
@@ -42,7 +43,9 @@ export default function () {
           }}
         >
           <img src="/assets/settings/coins.png" alt="coins" />
-          <span className="flex-grow-1">ريال</span>
+          <span className="flex-grow-1">
+            <CurrencySymbol />
+          </span>
           {balance}
         </div>
 

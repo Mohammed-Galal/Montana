@@ -4,6 +4,7 @@ import getPage from "../../translation";
 import { useRef, useState } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { useSelector, useDispatch, useStore } from "react-redux";
+import CurrencySymbol from "../../CurrencySymbol";
 import NXT from "../../icons/NXT";
 import Plus from "../../icons/Plus";
 import Minus from "../../icons/Minus";
@@ -100,7 +101,7 @@ function Form({ productItem }) {
             {addon.name}
 
             <span style={{ fontSize: "smaller", marginLeft: "20px" }}>
-              /{addon.price} {getText(1)}
+              /{addon.price} <CurrencySymbol />
             </span>
 
             {isActive ? Minus : Plus}
@@ -218,7 +219,7 @@ function Form({ productItem }) {
           </button>
 
           <span className="h5 m-0">
-            {totalPrice} {getText(1)}
+            {totalPrice} <CurrencySymbol />
           </span>
         </li>
       </ul>

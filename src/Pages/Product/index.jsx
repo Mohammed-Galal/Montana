@@ -12,6 +12,7 @@ import Minus from "../../icons/Minus";
 import Plus from "../../icons/Plus";
 import { getActiveLang } from "../../translation";
 import "./index.scss";
+import CurrencySymbol from "../../CurrencySymbol";
 
 const getText = getPage("product"),
   isArabic = getActiveLang() === "العربية",
@@ -141,9 +142,9 @@ function ProductInfo(state) {
   return (
     <section
       id="product"
-      className="container-fluid container-lg d-flex flex-wrap position-relative"
+      className="container-fluid container-lg d-flex flex-md-nowrap flex-wrap position-relative"
     >
-      <div className="d-flex flex-column justify-content-center py-2">
+      <div className="col-12 col-md-4 d-flex flex-column justify-content-center py-2">
         <img src={imageSrc} alt="product" />
         {/* <div className="d-flex justify-content-around">
           <img src={imageSrc} alt="product" />
@@ -182,7 +183,7 @@ function ProductInfo(state) {
         />
       </div>
 
-      <div className="align-items-start col-12 col-lg d-flex flex-column position-relative">
+      <div className="align-items-start col d-flex flex-column position-relative">
         {/*
         <ul className="d-flex gap-1 list-unstyled m-0 p-0">
           <li>Montana</li>
@@ -210,21 +211,21 @@ function ProductInfo(state) {
         <div
           className="desc w-100"
           dangerouslySetInnerHTML={{
-            __html: docFrag.querySelector("td")?.innerHTML,
+            __html: docFrag.innerHTML,
           }}
         ></div>
 
         {old_price > 0 && +state.price < old_price && (
           <div>
             <del>
-              {state.old_price} {getText(6)}
+              {state.old_price} <CurrencySymbol />
             </del>
           </div>
         )}
 
-        <div className="price">
+        <div className="d-flex price">
           <span>
-            {state.price} {getText(6)}
+            {state.price} <CurrencySymbol />
           </span>
           /{priceType}
         </div>
@@ -293,7 +294,7 @@ function ProductInfo(state) {
               className="h5 m-0"
               style={{ fontWeight: "600", color: "var(--primary)" }}
             >
-              {totalPrice} {getText(6)}
+              {totalPrice} <CurrencySymbol />
             </span>
           </div>
         )}
