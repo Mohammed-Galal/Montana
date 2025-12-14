@@ -135,7 +135,6 @@ export default function () {
     }
 
     clues.requestSent = true;
-    setTimeout(() => (clues.requestSent = false), 1000);
 
     const images = reqBody.images || [],
       formData = new FormData();
@@ -157,10 +156,11 @@ export default function () {
     fetch(placeOrderApi, fetchOpts)
       .then((r) => r.json())
       .then(handleInvoice)
-      .catch(console.log);
+      .catch(handleInvoice);
   }
 
   function handleInvoice(res) {
+    clues.requestSent = false;
     if (res.success === false) return setErr(getText(4));
 
     updateUserInfo();

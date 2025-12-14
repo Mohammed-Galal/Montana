@@ -13,6 +13,9 @@ import DirectionsRunRoundedIcon from "@mui/icons-material/DirectionsRunRounded";
 import SpaRoundedIcon from "@mui/icons-material/SpaRounded";
 import EggRoundedIcon from "@mui/icons-material/EggRounded";
 
+const nutritionInfo = window.Nutriants,
+  Nutriants = Object.keys(nutritionInfo);
+
 const emptyArr = [],
   getText = getPage("productItem"),
   dispatch = S.dispatch,
@@ -189,6 +192,15 @@ function ProductItem({ item, I }) {
             )}
           </div>
 
+          <div className="d-flex align-items-center justify-content-between">
+            <span className="fw-semibold" style={{ fontSize: "12px" }}>
+              {nutritionInfo.calories.icon} {item.calories}{" "}
+              {nutritionInfo.calories[isArabic ? "ar" : "en"]}
+            </span>
+
+            <Facts src={item} />
+          </div>
+
           <div className="align-items-center d-flex price">
             {old_price > 0 && (
               <sub style={{ marginInlineEnd: "4px" }}>
@@ -199,7 +211,6 @@ function ProductItem({ item, I }) {
               {price} <CurrencySymbol />
             </span>
             /{priceType}
-            <Facts src={item} />
           </div>
         </Link>
       </div>
@@ -281,25 +292,69 @@ function ProductItem({ item, I }) {
 }
 
 function Facts({ src }) {
+  const hasNut = Nutriants.filter((n) => n !== "calories").some(
+    (n) => !!src[n]
+  );
+
+  if (!hasNut) return null;
+
   return (
     <Tooltip
-      placement="bottom"
+      // placement={isArabic ? "right" : "left"}
+      placement="top"
       title={
         <ul
-          className="d-flex flex-column gap-1 m-0 px-3 py-1"
-          style={{ fontSize: "0.75rem", fontWeight: "600" }}
+          className="d-grid m-0 nutrations-list px-1 py-1 row-gap-1 gap-1 small"
+          style={{ gridTemplateColumns: "auto auto" }}
+          dir={isArabic ? "rtl" : "ltr"}
         >
-          <li>68 دقائق</li>
-          <li>المكسرات ومنتجاتها</li>
-          <li>المكسرات ومنتجاتهاالفول السوداني ومنتجاته</li>
-          <li>جلوتين</li>
-          <li>البيض ومنتجاته</li>
+          <Nutriant keyName="caffeine" />
+          <Nutriant keyName="calcium" />
+          {/* <Nutriant keyName="calories" /> */}
+          <Nutriant keyName="carbohydrates" />
+          <Nutriant keyName="cholesterol" />
+          <Nutriant keyName="dietary_fiber" />
+          <Nutriant keyName="fats" />
+          <Nutriant keyName="refined_sugars" />
+          <Nutriant keyName="protein" />
+          <Nutriant keyName="potassium" />
+          <Nutriant keyName="iron" />
+          <Nutriant keyName="saturated_fat" />
+          <Nutriant keyName="sodium" />
+          <Nutriant keyName="trans_fat" />
+          <Nutriant keyName="sugars" />
         </ul>
       }
     >
-      <InfoOutlineRoundedIcon
-        style={{ color: "var(--primary)", marginInlineStart: "auto" }}
-      />
+      <Button
+        style={{
+          color: "var(--primary)",
+          gap: "4px",
+          font: "inherit",
+          marginInlineStart: "auto",
+          fontWeight: "600",
+        }}
+      >
+        <InfoOutlineRoundedIcon />
+        <span className="fw-semibold" style={{ fontSize: "12px" }}>
+          حقائق تغذوية
+        </span>
+      </Button>
     </Tooltip>
   );
+
+  function Nutriant({ keyName }) {
+    if (!src[keyName]) return null;
+
+    const targetItem = nutritionInfo[keyName];
+
+    return (
+      <li
+        className="align-items-center d-flex gap-1"
+        data-icon={targetItem.icon}
+      >
+        {src[keyName]} {targetItem[isArabic ? "ar" : "en"].toUpperCase()}
+      </li>
+    );
+  }
 }

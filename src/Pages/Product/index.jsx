@@ -13,6 +13,10 @@ import Plus from "../../icons/Plus";
 import { getActiveLang } from "../../translation";
 import "./index.scss";
 import CurrencySymbol from "../../CurrencySymbol";
+import Arrow_Down from "../../icons/Arrow_Down";
+
+const nutrationInfo = window.Nutriants,
+  Nutriants = Object.keys(nutrationInfo);
 
 const getText = getPage("product"),
   isArabic = getActiveLang() === "العربية",
@@ -144,8 +148,9 @@ function ProductInfo(state) {
       id="product"
       className="container-fluid container-lg d-flex flex-md-nowrap flex-wrap position-relative"
     >
-      <div className="col-12 col-md-4 d-flex flex-column justify-content-center py-2">
+      <div className="col-12 col-md-4 d-flex flex-column py-2">
         <img src={imageSrc} alt="product" />
+
         {/* <div className="d-flex justify-content-around">
           <img src={imageSrc} alt="product" />
           <img src={imageSrc} alt="product" />
@@ -184,16 +189,6 @@ function ProductInfo(state) {
       </div>
 
       <div className="align-items-start col d-flex flex-column position-relative">
-        {/*
-        <ul className="d-flex gap-1 list-unstyled m-0 p-0">
-          <li>Montana</li>
-          <li>{NXT}</li>
-          <li>{getText(3)}</li>
-          <li>{NXT}</li>
-          <li>{state.name}</li>
-        </ul>
-        */}
-
         <h1 className="title h2">{productName}</h1>
 
         <div className="state text-center d-flex align-items-center gap-2">
@@ -207,13 +202,6 @@ function ProductInfo(state) {
           </span>
           {+state.price < old_price && discountFlag}
         </div>
-
-        <div
-          className="desc w-100"
-          dangerouslySetInnerHTML={{
-            __html: docFrag.innerHTML,
-          }}
-        ></div>
 
         {old_price > 0 && +state.price < old_price && (
           <div>
@@ -230,12 +218,22 @@ function ProductInfo(state) {
           /{priceType}
         </div>
 
-        {cals}
+        <div className="desc w-100 d-flex flex-column gap-3 mb-2">
+          <div
+            dangerouslySetInnerHTML={{
+              __html: docFrag.innerHTML,
+            }}
+          ></div>
 
-        <div className="align-items-center d-flex rate">
+          <NutritionsFacts item={state} />
+        </div>
+
+        {/* {cals} */}
+
+        {/* <div className="align-items-center d-flex rate">
           <img src="/assets/home/icons/star.svg" alt="star" /> 5
           <Link to="/rate">{getText(7)}</Link>
-        </div>
+        </div> */}
 
         {!!categories.length && (
           <div className="addons d-flex flex-wrap w-100">
@@ -410,4 +408,56 @@ function Related({ items, exclude, categoryID }) {
       />
     </section>
   );
+}
+
+function NutritionsFacts({ item }) {
+  const pills = Nutriants.map((keyName) => {
+    if (!item[keyName]) return null;
+    const target = nutrationInfo[keyName];
+
+    return (
+      <li
+        key={keyName}
+        className="align-items-center d-flex px-3 py-1"
+        style={{
+          background: "aliceblue",
+          color: "var(--primary)",
+          borderRadius: "20px",
+          border: "1px solid #ddd",
+        }}
+      >
+        {target.icon} {item[keyName]} {target[isArabic ? "ar" : "en"]}
+      </li>
+    );
+  });
+
+  return (
+    <div id="nutration-info" className="active">
+      <label
+        className="d-flex align-items-center gap-2 h6 mb-3"
+        style={{ color: "var(--primary)", cursor: "pointer" }}
+      >
+        <input type="checkbox" hidden={true} onChange={toggleNlist} />
+        الحقائق التغذوية
+        {Arrow_Down}
+      </label>
+
+      <ul
+        ref={declareHeight}
+        className="d-flex flex-wrap gap-2 small list-unstyled m-0 p-0"
+      >
+        {pills}
+      </ul>
+    </div>
+  );
+
+  function toggleNlist() {
+    document.getElementById("nutration-info").classList.toggle("active");
+  }
+
+  function declareHeight(el) {
+    if (el) {
+      el.style.setProperty("--h", el.scrollHeight + "px");
+    }
+  }
 }

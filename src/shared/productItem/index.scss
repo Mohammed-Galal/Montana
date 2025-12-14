@@ -1,3 +1,11 @@
+.MuiTooltip-tooltip {
+  font: inherit !important;
+  background: aliceblue !important;
+  color: var(--primary) !important;
+  // max-height: 10.1rem;
+  // overflow: auto;
+}
+
 .swiper-slide:has(.product-item) {
   // height: unset !important;
   // width: auto !important;
@@ -168,5 +176,15 @@ div.product-item {
       background-color: var(--primary) !important;
       color: #fff !important;
     }
+  }
+
+}
+
+.nutrations-list {
+  list-style: none;
+
+  & > li::before {
+    content: attr(data-icon);
+    font-family: "Segoe UI Emoji";
   }
 }

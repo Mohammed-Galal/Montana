@@ -1,7 +1,6 @@
 #product {
   gap: 12px;
 
-  
   & > div:first-child {
     gap: inherit;
 
@@ -14,16 +13,17 @@
       gap: inherit;
     }
   }
-  
+
   & > div:last-child {
     gap: 1rem;
     color: var(--midgray);
     text-align: justify;
-    
-    .desc *{
+
+    .desc > div:first-child * {
       width: auto !important;
       height: auto !important;
       border: none !important;
+      margin: 0;
     }
 
     & > ul > li:last-child {
@@ -116,11 +116,12 @@
       }
 
       & > button {
-        background-color: #184369;
-        color: #fff;
-        font-size: 1rem;
+        background-color: aliceblue;
+        border: 0;
+        color: var(--primary);
+        font-size: 0.75rem;
         clip-path: circle();
-        scale: 0.8;
+        // scale: 0.8;
       }
 
       & > div {
@@ -131,6 +132,30 @@
         text-align: center;
         border-radius: 16px;
       }
+    }
+  }
+}
+
+#product #nutration-info {
+  & > label > svg {
+    transform: rotate(0deg);
+    transition: 0.3s ease-out;
+  }
+
+  & > ul {
+    will-change: auto;
+    max-height: 0px;
+    overflow: hidden;
+    transition: 0.3s ease-out;
+  }
+
+  &.active {
+    & > label > svg {
+      transform: rotate(-180deg);
+    }
+
+    & > ul {
+      max-height: var(--h);
     }
   }
 }
