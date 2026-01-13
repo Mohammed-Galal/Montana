@@ -103,25 +103,30 @@
     & > .checkout {
       justify-content: start;
 
-      @media screen and (max-width: 1200px) {
-        background-color: aliceblue;
-        justify-content: center;
-        position: fixed;
-        z-index: 3;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        padding: 1rem 1rem 10vh;
-        border-radius: 25px 25px 0 0;
-      }
-
       & > button {
         background-color: aliceblue;
         border: 0;
         color: var(--primary);
         font-size: 0.75rem;
         clip-path: circle();
-        // scale: 0.8;
+        scale: 0.8;
+      }
+
+      @media screen and (max-width: 576px) {
+        background-color: aliceblue;
+        justify-content: center;
+        position: fixed;
+        z-index: 3;
+        left: 0;
+        right: 0;
+        bottom: 67px;
+        padding: 0.7rem 1rem;
+        border-radius: 12px 12px 0 0;
+
+        & > button {
+          background-color: var(--primary);
+          color: #fff;
+        }
       }
 
       & > div {

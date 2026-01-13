@@ -25,7 +25,7 @@ export default function () {
           <div className="col-3 d-flex flex-column">
             <img
               className="mb-3"
-              src="https://montana.amir-adel.com/admin/assets/home/logo-white.svg"
+              src="/assets/home/logo-white.svg"
               alt="logo"
             />
             {getText(0)}

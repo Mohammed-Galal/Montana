@@ -9,6 +9,25 @@ import OrderOptions from "./OrderOptions";
 import OrderInfo from "./OrderInfo";
 import "./index.scss";
 
+var config = {
+  // Add the "SessionId" you received from POST Session Endpoint.
+  // sessionId: "KWT-68814db6-7510-4005-ada9-408aae9f373c",
+
+  // MyFatoorah triggers this callback after the customer completes payment, either by submitting card details, finishing Google Pay / Apple Pay / STC Pay, or choosing any hosted payment method.
+  callback: payment,
+
+  //Enter the div id you created in previous step.
+  containerId: "embedded-sessions",
+
+  // Default true
+  shouldHandlePaymentUrl: true,
+};
+
+function payment(response) {
+  // debugger;
+  console.log(JSON.stringify(response));
+}
+
 const getText = getPage("checkout"),
   complimentaryData = {},
   placeOrderApi = process.env.REACT_APP_API_URL + "/public/api/place-order",
@@ -183,6 +202,10 @@ export default function () {
     }
 
     if (paymentMode !== "COD") {
+      // debugger;
+
+      // window.myfatoorah.init(config);
+
       window.localStorage.setItem(
         "invoiceData",
         JSON.stringify(basicOrderData)

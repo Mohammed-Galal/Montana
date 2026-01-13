@@ -1,12 +1,14 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { mobileScreen } from "../shared/isMobile";
 import Loc from "../icons/Loc";
 import Arrow_Down from "../icons/Arrow_Down";
 
 import desktop from "./desktop";
 import mobile from "./mobile";
 import "./index.scss";
+import { useEffect, useState } from "react";
 
 const baseUrl = process.env.REACT_APP_API_URL + "/public/api/",
   fetchOpts = {
@@ -18,14 +20,24 @@ const baseUrl = process.env.REACT_APP_API_URL + "/public/api/",
   };
 
 export default function (isMobileDevice) {
-  const Target = isMobileDevice ? mobile : desktop;
-
   return (
     <>
       <CurrLoc />
-      <Target />
+      <HeaderContainer />
     </>
   );
+}
+
+function HeaderContainer() {
+  const [isMobileDevice, setView] = useState(mobileScreen.matches);
+
+  useEffect(function () {
+    mobileScreen.onchange = () => setView(mobileScreen.matches);
+  });
+
+  const Target = isMobileDevice ? mobile : desktop;
+
+  return <Target />;
 }
 
 function CurrLoc() {

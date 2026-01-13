@@ -170,7 +170,7 @@ export default function ({
           }}
         >
           <img
-            src="https://montana.amir-adel.com/admin/assets/home/logo.svg"
+            src="/assets/home/logo.svg"
             style={{ maxHeight: "40px" }}
             alt="icon"
           />
@@ -296,6 +296,8 @@ export default function ({
             ? activeStores.find(({ distance }) => distance === minDistance)
             : false;
         } else {
+          debugger;
+
           clues.closestRes = false;
 
           window.modalOptions.open(

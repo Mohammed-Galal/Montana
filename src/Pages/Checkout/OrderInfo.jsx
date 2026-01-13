@@ -51,7 +51,6 @@ export default function (props) {
             restaurant_id: "" + currRes.id,
             subtotal: "" + (subTotal - wallet_balance),
           };
-        // debugger;
         _useCoupon(couponParams, token, applyCoupon, rejectCoupon);
       }
     },
@@ -105,7 +104,7 @@ export default function (props) {
       <div>
         {getText(26)}
         <span>
-          {-wallet_balance + " "} <CurrencySymbol />
+          {wallet_balance + " "} <CurrencySymbol />
         </span>
       </div>
 
@@ -171,7 +170,7 @@ export default function (props) {
               marginInlineEnd: "6px",
             }}
           >
-            <del>
+            <del className="align-items-center d-flexs">
               {totalBeforeDiscount.toLocaleString("en-US")} <CurrencySymbol />
             </del>
           </sub>

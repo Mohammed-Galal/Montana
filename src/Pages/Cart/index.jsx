@@ -114,7 +114,7 @@ function ItemsContainer({ cart, totalPrice, setErr, cashback, store }) {
           <span className="total">
             <samp>{getText(15)}</samp>
             <samp>
-              {-userWallet} <CurrencySymbol />
+              {userWallet} <CurrencySymbol />
             </samp>
           </span>
 
@@ -477,7 +477,7 @@ function DesktopProductItem(item, I, editCart) {
           style={{ textAlign: "start" }}
           to={
             "/products/" +
-            item.slug +
+            (item.slug || "product-item") +
             "?id=" +
             id +
             "&isCustom=" +

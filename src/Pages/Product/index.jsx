@@ -57,7 +57,8 @@ export default function () {
 function ProductInfo(state) {
   let quantity = 0;
 
-  const dispatch = useDispatch(),
+  const isAvailable = !!state.is_active && state.stock > 0,
+    dispatch = useDispatch(),
     resId = useStore().getState().Restaurant.data.id,
     cartItems = useSelector((e) => e.Products).cart,
     [Alert, setAlert] = useState(false),
@@ -146,7 +147,7 @@ function ProductInfo(state) {
   return (
     <section
       id="product"
-      className="container-fluid container-lg d-flex flex-md-nowrap flex-wrap position-relative"
+      className="container-fluid container-lg d-flex flex-md-nowrap flex-wrap position-relative py-0 py-md-4"
     >
       <div className="col-12 col-md-4 d-flex flex-column py-2">
         <img src={imageSrc} alt="product" />
@@ -193,12 +194,16 @@ function ProductInfo(state) {
 
         <div className="state text-center d-flex align-items-center gap-2">
           <span
-            className="flag"
-            style={{
-              backgroundColor: state.is_active ? "#5b9c64" : "var(--bs-danger)",
-            }}
+            className="flag d-flex align-items-center gap-1"
+            style={initStateStyle(isAvailable)}
           >
-            {!!state.is_active ? getText(4) : getText(5)}
+            {!!isAvailable ? (
+              <>
+                {getText(4)} <b>{state.stock}</b>
+              </>
+            ) : (
+              getText(5)
+            )}
           </span>
           {+state.price < old_price && discountFlag}
         </div>
@@ -262,8 +267,8 @@ function ProductInfo(state) {
           </div>
         )}
 
-        {!!state.is_active && (
-          <div className="mt-auto align-items-center checkout d-flex gap-3 text-nowrap w-100">
+        {!!isAvailable && (
+          <div className="mt-auto align-items-center checkout d-flex gap-3 text-nowrap w-auto">
             <button
               type="button"
               className="align-items-center btn d-flex justify-content-center"
@@ -320,8 +325,10 @@ function ProductInfo(state) {
   );
 
   function inc() {
-    quantity++;
-    addItemToCart();
+    if (Number.isInteger(state.stock) && quantity < state.stock) {
+      quantity++;
+      addItemToCart();
+    }
   }
 
   function dec() {
@@ -460,4 +467,19 @@ function NutritionsFacts({ item }) {
       el.style.setProperty("--h", el.scrollHeight + "px");
     }
   }
+}
+
+function initStateStyle(isAvailable) {
+  const result = {
+    backgroundColor: "rgb(91 156 100 / 8%)",
+    color: "rgb(91, 156, 100)",
+    fontWeight: "bolder",
+  };
+
+  if (!isAvailable) {
+    result.backgroundColor = "#dc35452b";
+    result.color = "var(--bs-danger)";
+  }
+
+  return result;
 }
