@@ -66,7 +66,11 @@ export default function () {
 
           <div className="col-3 d-flex flex-column gap-1">
             <span className="h5 mb-3">{getText(4)}</span>
-            <Link to="" className="mb-2">
+            <Link
+              target="_blank"
+              to="https://play.google.com/store/apps/details?id=montana.sa"
+              className="mb-2"
+            >
               <img
                 style={{
                   width: "142px",
@@ -78,7 +82,10 @@ export default function () {
               />
             </Link>
 
-            <Link to="">
+            <Link
+              target="_blank"
+              to="https://apps.apple.com/us/app/%D8%AD%D9%84%D9%88%D9%8A%D8%A7%D8%AA-%D9%85%D9%88%D9%86%D8%AA%D8%A7%D9%86%D8%A7/id6755387336"
+            >
               <img
                 style={{ width: "142px" }}
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Download_on_the_App_Store_RGB_blk.svg/1024px-Download_on_the_App_Store_RGB_blk.svg.png"

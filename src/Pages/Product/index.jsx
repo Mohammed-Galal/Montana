@@ -57,7 +57,7 @@ export default function () {
 function ProductInfo(state) {
   let quantity = 0;
 
-  const isAvailable = !!state.is_active && state.stock > 0,
+  const isAvailable = !!state.is_active || state.stock > 0,
     dispatch = useDispatch(),
     resId = useStore().getState().Restaurant.data.id,
     cartItems = useSelector((e) => e.Products).cart,
@@ -199,7 +199,8 @@ function ProductInfo(state) {
           >
             {!!isAvailable ? (
               <>
-                {getText(4)} <b>{state.stock}</b>
+                {getText(4)}
+                {/* <b>{state.stock}</b> */}
               </>
             ) : (
               getText(5)
@@ -325,10 +326,9 @@ function ProductInfo(state) {
   );
 
   function inc() {
-    if (Number.isInteger(state.stock) && quantity < state.stock) {
-      quantity++;
-      addItemToCart();
-    }
+    // if (Number.isInteger(state.stock) && quantity < state.stock) {}
+    quantity++;
+    addItemToCart();
   }
 
   function dec() {

@@ -38,16 +38,16 @@ export default function () {
   const [loaded, setLoaded] = useState(false);
 
   const viewOccassions = params.has("occassions"),
-    excludedCategories = data.filter((i) =>
-      params.has("occassions")
-        ? customCategoriesExp.test(i.category_name)
-        : !customCategoriesExp.test(i.category_name)
+    excludedCategories = data.filter(
+      (i) =>
+        params.has("occassions") === customCategoriesExp.test(i.category_name),
     ),
+    availCategories = new Set(),
     items = excludedCategories.map((item, index) => {
       const categoryMatched = item.category_name.includes(category),
         nameExp = new RegExp(productName, "i"),
         nameMatched = nameExp.test(item.name) || nameExp.test(item.name_ar);
-
+      availCategories.add(item.category_name);
       if (categoryMatched && nameMatched) return ProductItem(item, index);
       return false;
     });
@@ -56,16 +56,17 @@ export default function () {
     setTimeout(() => setLoaded(true), 1000);
   }
 
-  const targetCategories = (
-    params.has("miniCategories") ? miniCategories : categories
-  ).filter((c) => !customCategoriesExp.test(c));
+  const targetCategories = Array.from(availCategories);
+  //  (
+  //   params.has("miniCategories") ? miniCategories : categories
+  // ).filter((c) => !customCategoriesExp.test(c));
 
   return (
     <section
       id="products"
       className="container d-flex flex-column flex-lg-row-reverse gap-5"
     >
-      {!viewOccassions && (
+      {(!viewOccassions || (viewOccassions && !urlParams.category)) && (
         <div style={{ width: "100%", height: "fit-content" }}>
           <input
             type="search"

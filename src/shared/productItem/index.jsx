@@ -38,7 +38,7 @@ function ProductItem({ item, I }) {
   let product,
     quantity = 0;
 
-  const isActive = !!item.is_active && item.stock > 0,
+  const isActive = !!item.is_active || item.stock > 0,
     priceType = isArabic
       ? priceTypes[item.price_type]
       : item.price_type.replace(/_/g, " ").toUpperCase(),
@@ -259,10 +259,9 @@ function ProductItem({ item, I }) {
   );
 
   function inc() {
-    if (Number.isInteger(item.stock) && quantity < item.stock) {
-      quantity++;
-      applyToCart();
-    }
+    // if (Number.isInteger(item.stock) && quantity < item.stock) {}
+    quantity++;
+    applyToCart();
   }
 
   function dec() {

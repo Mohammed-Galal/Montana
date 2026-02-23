@@ -12,3 +12,9 @@
     background: #f8f8f8;
     background: #bdbdbd;
     background: #191817; */
+
+html,
+body {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+}

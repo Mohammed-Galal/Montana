@@ -9,24 +9,20 @@ import OrderOptions from "./OrderOptions";
 import OrderInfo from "./OrderInfo";
 import "./index.scss";
 
-var config = {
-  // Add the "SessionId" you received from POST Session Endpoint.
-  // sessionId: "KWT-68814db6-7510-4005-ada9-408aae9f373c",
+const config = {
+    // Add the "SessionId" you received from POST Session Endpoint.
+    // sessionId: "KWT-68814db6-7510-4005-ada9-408aae9f373c",
 
-  // MyFatoorah triggers this callback after the customer completes payment, either by submitting card details, finishing Google Pay / Apple Pay / STC Pay, or choosing any hosted payment method.
-  callback: payment,
+    // MyFatoorah triggers this callback after the customer completes payment, either by submitting card details, finishing Google Pay / Apple Pay / STC Pay, or choosing any hosted payment method.
+    // callback: payment,
 
-  //Enter the div id you created in previous step.
-  containerId: "embedded-sessions",
+    //Enter the div id you created in previous step.
+    containerId: "embedded-sessions",
 
-  // Default true
-  shouldHandlePaymentUrl: true,
-};
-
-function payment(response) {
-  // debugger;
-  console.log(JSON.stringify(response));
-}
+    // Default true
+    shouldHandlePaymentUrl: true,
+  },
+  sessionContainer = document.getElementById("session-container");
 
 const getText = getPage("checkout"),
   complimentaryData = {},
@@ -82,7 +78,7 @@ export default function () {
         deliveryState[1](false);
       }
     },
-    [resId, clues.isExceptionalCart, deliveryState[0]]
+    [resId, clues.isExceptionalCart, deliveryState[0]],
   );
 
   if (cartItems.length === 0) return null;
@@ -153,6 +149,7 @@ export default function () {
       }
     }
 
+    delete clues.cashback;
     clues.requestSent = true;
 
     const images = reqBody.images || [],
@@ -184,7 +181,9 @@ export default function () {
 
     updateUserInfo();
 
-    const paymentMode = res.data.payment_mode,
+    let invoiceQParams = "";
+
+    const paymentMode = payment[0],
       basicOrderData = {
         order: reqBody.order,
         discount: clues.discount,
@@ -201,34 +200,32 @@ export default function () {
         clues.userAddresses[store.User.activeAddressIndex].tag;
     }
 
-    if (paymentMode !== "COD") {
-      // debugger;
+    if (paymentMode === "COD") {
+      const { data } = res,
+        invoiceState = {
+          ...basicOrderData,
+          tax: data.tax,
+          restaurant_name: res.data.restaurant.name,
+          date: data.created_at.split(" "),
+          comment: data.order_comment,
+          code: data.unique_order_id,
+          PIN: data.delivery_pin,
+          tax_amount: data.tax_amount,
+          total: data.total,
+          price: data.payable,
+          subTotal: data.sub_total,
+        };
 
-      // window.myfatoorah.init(config);
-
-      window.localStorage.setItem(
-        "invoiceData",
-        JSON.stringify(basicOrderData)
-      );
-      return (window.location.href = res.data.link);
+      return redirect("/invoice", { state: invoiceState });
     }
 
-    const { data } = res,
-      invoiceState = {
-        ...basicOrderData,
-        tax: data.tax,
-        restaurant_name: res.data.restaurant.name,
-        date: data.created_at.split(" "),
-        comment: data.order_comment,
-        code: data.unique_order_id,
-        PIN: data.delivery_pin,
-        tax_amount: data.tax_amount,
-        total: data.total,
-        price: data.payable,
-        subTotal: data.sub_total,
-      };
+    try {
+      initMyFatoorah(res.data.sessionId, res.data.order_id);
+    } catch (e) {
+      debugger;
+    }
 
-    redirect("/invoice", { state: invoiceState });
+    // return (window.location.href = res.data.link);
   }
 }
 
@@ -286,7 +283,7 @@ function ClosestResPopup({ setDelivery, clues, dispatch, redirect }) {
                 {
                   method: "POST",
                   headers: { "Content-type": "application/json" },
-                }
+                },
               )
                 .then((res) => res.json())
                 .then((data) => {
@@ -393,3 +390,23 @@ Object.assign(complimentaryData, {
   auto_acceptable: false,
   CallBackUrl: window.location.origin + "/invoice/",
 });
+
+export function initMyFatoorah(sessionId, orderId) {
+  sessionContainer.classList.remove("d-none");
+
+  window.myfatoorah.init({
+    ...config,
+    sessionId: sessionId,
+    callback(res) {
+      if (res.isSuccess) {
+        window.location.href = `/invoice/${orderId}?paymentId=${extractPaymentId(res)}&sessionId=${sessionId}`;
+      }
+    },
+  });
+
+  document.body.style.overflow = "hidden";
+}
+function extractPaymentId(res) {
+  const url = new URL(res.redirectionUrl);
+  return url.searchParams.get("paymentId");
+}

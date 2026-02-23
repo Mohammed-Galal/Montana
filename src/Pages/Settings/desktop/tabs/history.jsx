@@ -5,6 +5,7 @@ import getPage, { observeLang } from "../../../../translation";
 import { useSelector } from "react-redux";
 import Carousel from "../../../../shared/Carousel";
 import CurrencySymbol from "../../../../CurrencySymbol";
+import { initMyFatoorah } from "../../../Checkout";
 
 const defaultColorTheme = {
     backgroundColor: "rgb(219 234 254)",
@@ -44,7 +45,7 @@ observeLang(() => {
     getText(16),
     getText(17),
     getText(18),
-    getText(19)
+    getText(19),
   );
 });
 
@@ -173,9 +174,9 @@ function orderItem(order) {
         )}
 
         {orderstatus_id === 8 ? (
-          <a
+          <button
             className="align-items-center btn d-inline-flex gap-1"
-            href={order.payment.InvoiceURL}
+            onClick={() => initMyFatoorah(order.payment.session_id, order.id)}
             style={{
               fontSize: "inherit",
               color: "rgb(250 190 32)",
@@ -183,7 +184,7 @@ function orderItem(order) {
             }}
           >
             {"أكمل الدفع"}
-          </a>
+          </button>
         ) : null}
 
         {(orderstatus_id === 1 || orderstatus_id === 10) && (

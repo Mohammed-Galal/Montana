@@ -20,6 +20,8 @@ export default () => {
   useEffect(
     function () {
       if (state === null) {
+        // const data = getOrderData(+(orderId || params.id), prevOrders);
+        // setState(data);
         if (params.id) instantPaymentInvoice();
         else if (orderId) {
           const data = getOrderData(+orderId, prevOrders);
@@ -27,7 +29,7 @@ export default () => {
         }
       }
     },
-    [prevOrders]
+    [prevOrders],
   );
 
   if (state === null) return null;
@@ -135,13 +137,25 @@ export default () => {
         </ul>
 
         <hr className="my-1" style={{ width: "100%", borderStyle: "dashed" }} />
+
         <p
           className="d-flex justify-content-between m-0 w-100"
           style={{ textAlign: "start" }}
         >
-          الضريبة ({+state.tax || 0}%){" "}
-          <span>{state.tax_amount.toFixed(2)}</span>
+          الخصم
+          <span>{state.discount.toFixed(2)}</span>
         </p>
+
+        {state.tax_amount ? (
+          <p
+            className="d-flex justify-content-between m-0 w-100"
+            style={{ textAlign: "start" }}
+          >
+            الضريبة ({+state.tax || 0}%){" "}
+            <span>{state.tax_amount.toFixed(2)}</span>
+          </p>
+        ) : null}
+
         <p
           className="d-flex justify-content-between m-0 w-100"
           style={{ textAlign: "start" }}
@@ -187,6 +201,8 @@ export default () => {
       >
         طباعة
       </button>
+
+      {/* <pre dir="ltr">{JSON.stringify(state, null, 2)}</pre> */}
     </section>
   );
 
@@ -202,29 +218,17 @@ export default () => {
         Authorization: window.localStorage.getItem("token"),
       },
       body: JSON.stringify({
+        isSuccess: true,
         order_id: params.id,
+        sessionId: query.get("sessionId"),
         paymentId: query.get("paymentId"),
       }),
     })
       .then((r) => r.json())
       .then((res) => {
         if (res.success) {
-          const basicOrderData = JSON.parse(
-              window.localStorage.getItem("invoiceData")
-            ),
-            { data } = res,
-            invoiceState = {
-              ...basicOrderData,
-              date: data.created_at.split(" "),
-              comment: data.order_comment,
-              code: data.unique_order_id,
-              PIN: data.delivery_pin,
-              price: data.payable,
-              total: data.total,
-              subTotal: data.sub_total,
-            };
-
-          setState(invoiceState);
+          const data = getOrderData(+params.id, prevOrders);
+          setState(data);
         } else {
           errMsg = res.message;
           setState(false);

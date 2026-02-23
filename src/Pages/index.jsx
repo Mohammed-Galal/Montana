@@ -35,12 +35,13 @@ import Footer from "../Footer.jsx";
 import Jobs from "./Jobs.jsx";
 import NotFound from "./NotFound.jsx";
 import PrivacyPolicy from "./PrivacyPolicy.jsx";
+import DownloadForm from "../Header/DownloadForm.jsx";
 
 const pageMapArr = Object.keys(pageMap);
 
 function updateMetaElData(data, value) {
   const currEl = document.querySelector(
-    "meta[" + data.keyName + "='" + data[data.keyName] + "']"
+    "meta[" + data.keyName + "='" + data[data.keyName] + "']",
   );
 
   try {
@@ -86,12 +87,15 @@ const activeLang = getActiveLang(),
 const getText = getPage("popup"),
   body = document.body,
   header = document.createElement("header"),
+  downloadDialog = document.createElement("section"),
   nav = document.querySelector("nav"),
   footer = document.querySelector("body > footer");
 
 isMobileView && (body.id = "mobile");
+downloadDialog.id = "download-form";
+downloadDialog.className = "d-none d-md-flex";
 body.prepend(header);
-
+body.prepend(downloadDialog);
 
 let pageTitles = null;
 
@@ -133,6 +137,7 @@ function App() {
 
   return (
     <>
+      {createPortal(<DownloadForm />, downloadDialog)}
       {createPortal(Header(isMobileView), header)}
 
       <SearchBar currRoute={location.pathname} />
@@ -197,7 +202,7 @@ function SearchBar({ currRoute }) {
   const isArabic = getActiveLang() === "العربية",
     brandName = isArabic ? "مونتانا" : "Montana",
     breadcrumbTarget = pageMapArr.find((e) =>
-      new RegExp("^" + e).test(currRoute)
+      new RegExp("^" + e).test(currRoute),
     );
 
   let breadcrumbData =
@@ -209,7 +214,7 @@ function SearchBar({ currRoute }) {
       targetProductsContainer = products[isCustom ? "early_booking" : "data"];
     if (targetProductsContainer.length && productId) {
       const targetProduct = targetProductsContainer.find(
-          (e) => +e.id === +productId
+          (e) => +e.id === +productId,
         ),
         productName = isArabic ? targetProduct.name_ar : targetProduct.name;
       breadcrumbData += " / " + productName;
@@ -302,7 +307,7 @@ function Popups() {
 function setDocTitle(appSettings) {
   const docPath = window.location.pathname;
   seoTags.forEach((data) =>
-    updateMetaElData(data, appSettings[data.contentKey])
+    updateMetaElData(data, appSettings[data.contentKey]),
   );
 
   let index = 0,

@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 import { useStore } from "react-redux";
-import { calcWalletCashback } from "../Cart";
+import { calcCashback } from "../Cart";
 import { _useCoupon } from "../Cart";
 import getPage from "../../translation";
 import CurrencySymbol from "../../CurrencySymbol";
@@ -54,11 +54,11 @@ export default function (props) {
         _useCoupon(couponParams, token, applyCoupon, rejectCoupon);
       }
     },
-    [coupon, delivery]
+    [coupon, delivery],
   );
 
   const subTotal = totalPrice,
-    cashbackAmount = +calcWalletCashback(totalPrice, cashback),
+    cashbackAmount = +calcCashback(totalPrice, cashback, settings),
     calcSubtotalDelivery =
       freeDeliverySubtotal > 0 && totalPrice >= freeDeliverySubtotal
         ? 0
@@ -70,19 +70,23 @@ export default function (props) {
   reqBody.cashback = cashbackAmount;
   coupon && (reqBody.coupon.code = coupon);
 
-  clues.discount = cashbackAmount;
-  discountAmount && (clues.discount += Math.abs(discountAmount));
+  clues.discount = 0;
+  discountAmount &&
+    (clues.discount += Math.min(subTotal, Math.abs(discountAmount)));
 
   const taxes =
     settings.taxApplicable === "true"
-      ? calcTaxes(totalPrice - clues.discount, +settings.taxPercentage)
+      ? calcTaxes(
+          totalPrice + delivery_charges - clues.discount,
+          +settings.taxPercentage,
+        )
       : 0;
 
   clues.discount += wallet_balance;
-  totalPrice = Math.max(0, totalPrice - clues.discount);
 
   const totalBeforeDiscount = subTotal + taxes + delivery_charges;
   const deliveryTargetOption = delivery ? "enCODonDelivery" : "enCODonSF";
+  totalPrice = totalPrice - clues.discount;
 
   totalPrice += delivery_charges;
   if (totalPrice === 0) reqBody.method = "COD";
@@ -115,7 +119,7 @@ export default function (props) {
             getText(22)
           ) : (
             <>
-              {-(Math.abs(discountAmount) + cashbackAmount)}
+              {-Math.abs(discountAmount)}
               <CurrencySymbol />
             </>
           )}
@@ -176,43 +180,44 @@ export default function (props) {
           </sub>
         )}
         <span>
-          {(totalPrice + taxes).toLocaleString("en-US")} <CurrencySymbol />
+          {Math.max(0, totalPrice + taxes).toLocaleString("en-US")}{" "}
+          <CurrencySymbol />
         </span>
       </div>
 
-      {totalPrice > 0 && (
-        <form style={{ color: "var(--black)" }}>
-          <span
-            className="d-block h5 text-center"
-            style={{ color: "var(--primary)" }}
-          >
-            {getText(28)}
-          </span>
+      {/* {totalPrice > 0 && ( */}
+      <form style={{ color: "var(--black)" }}>
+        <span
+          className="d-block h5 text-center"
+          style={{ color: "var(--primary)" }}
+        >
+          {getText(28)}
+        </span>
 
-          <label className="d-flex gap-2 mb-3">
-            <input
-              type="radio"
-              name="payment"
-              onChange={() => setPaymentMethod("myfatoorah")}
-              checked={paymentMethod === "myfatoorah"}
-            />
-            {getText(29)}
-          </label>
+        <label className="d-flex gap-2 mb-3">
+          <input
+            type="radio"
+            name="payment"
+            onChange={() => setPaymentMethod("myfatoorah")}
+            checked={paymentMethod === "myfatoorah"}
+          />
+          {getText(29)}
+        </label>
 
-          {isExceptionalCart ||
-            (settings[deliveryTargetOption] === "true" && (
-              <label className="d-flex gap-2">
-                <input
-                  type="radio"
-                  name="payment"
-                  onChange={() => setPaymentMethod("COD")}
-                  checked={paymentMethod === "COD"}
-                />
-                {getText(30)}
-              </label>
-            ))}
-        </form>
-      )}
+        {isExceptionalCart ||
+          (settings[deliveryTargetOption] === "true" && (
+            <label className="d-flex gap-2">
+              <input
+                type="radio"
+                name="payment"
+                onChange={() => setPaymentMethod("COD")}
+                checked={paymentMethod === "COD"}
+              />
+              {getText(30)}
+            </label>
+          ))}
+      </form>
+      {/* )} */}
 
       {(!delivery || userAddresses.length > 0) && (
         <>

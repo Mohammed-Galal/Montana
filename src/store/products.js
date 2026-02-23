@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
-
 const slug = window.localStorage.getItem("slug"),
+  OrdinaryCategoriesIds = [1, 2, 3, 4, 5, 6, 7],
   customOrderExp = new RegExp(
     [
       "اليوم الوطني",
@@ -15,7 +14,7 @@ const slug = window.localStorage.getItem("slug"),
       "زفاف",
       "الحجز المبكر",
       "الطلبات الخاصة",
-    ].join("|")
+    ].join("|"),
   ),
   cartStorage = JSON.parse(window.localStorage.getItem("cartItems")) || {};
 
@@ -23,12 +22,14 @@ const Products = {
     name: "products",
     initialState: {
       loaded: false,
-      is_special: !(cartStorage[slug] || []).some((item) =>
-        [1, 2, 3, 4, 5, 6, 7].includes(item.category_id)
-      ),
+      is_special:
+        (cartStorage[slug] || []).some((item) =>
+          OrdinaryCategoriesIds.includes(item.category_id),
+        ) === false,
       early_booking: [],
       custom: [],
       categories: [],
+      occassionsCategories: [],
       customCategoriesExp: customOrderExp,
       miniCategories: [],
       data: [],

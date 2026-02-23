@@ -34,6 +34,7 @@ export default function ({
   const { userAddresses, isExceptionalCart } = clues,
     activeAddress = User.activeAddressIndex,
     branches = Restaurant.branches,
+    // debugger;
     setActiveAddress = (indx) => {
       indx === activeAddress || (clues.closestRes = null);
       dispatch({ type: "user/setActiveAddress", payload: indx });
@@ -41,7 +42,7 @@ export default function ({
 
   useLayoutEffect(() => {
     delivery && userAddresses.length && fetchDeliveryRestaurants();
-  }, [activeAddress, delivery]);
+  }, [activeAddress === prevActiveAddress, delivery]);
 
   if (delivery) {
     reqBody.delivery_type = "1";
@@ -273,7 +274,6 @@ export default function ({
   function fetchDeliveryRestaurants() {
     const address = userAddresses[activeAddress];
 
-    if (activeAddress === prevActiveAddress) return;
     prevActiveAddress = activeAddress;
 
     fetch(
@@ -282,7 +282,7 @@ export default function ({
         method: "POST",
         body: JSON.stringify(address),
         headers: { "Content-Type": "application/json" },
-      }
+      },
     )
       .then((res) => res.json())
       .then((data) => {
@@ -290,19 +290,16 @@ export default function ({
 
         if (activeStores.length > 0) {
           const minDistance = Math.min(
-            ...activeStores.map(({ distance }) => distance)
+            ...activeStores.map(({ distance }) => distance),
           );
           clues.closestRes = minDistance
             ? activeStores.find(({ distance }) => distance === minDistance)
             : false;
         } else {
-          debugger;
-
           clues.closestRes = false;
-
           window.modalOptions.open(
             "لا توجد فروع قريبة منك، هل تريد استلام الطلب من الفرع ؟",
-            (isOk) => isOk && setDelivery(false)
+            (isOk) => isOk && setDelivery(false),
           );
         }
       });

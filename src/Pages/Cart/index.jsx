@@ -82,7 +82,11 @@ export function _useCoupon(params, auth, callback, rejectCallback) {
 function ItemsContainer({ cart, totalPrice, setErr, cashback, store }) {
   const discountController = useState(0);
   const userWallet = +store.User.data.wallet_balance || 0;
-  const cashbackAmount = calcWalletCashback(totalPrice, cashback);
+  const cashbackAmount = calcCashback(
+    totalPrice,
+    cashback,
+    store.settings.data,
+  );
 
   return (
     <section
@@ -123,9 +127,9 @@ function ItemsContainer({ cart, totalPrice, setErr, cashback, store }) {
             <samp>
               {discountController[0] === false
                 ? getText(17)
-                : -(
-                    cashbackAmount + Math.abs(discountController[0])
-                  ).toLocaleString("en-US") + " "}
+                : -Math.abs(discountController[0]).toLocaleString("en-US") +
+                  " "}
+              {/* cashbackAmount + Math.abs(discountController[0]) */}
 
               <CurrencySymbol />
             </samp>
@@ -135,11 +139,10 @@ function ItemsContainer({ cart, totalPrice, setErr, cashback, store }) {
         <span className="total">
           <samp>{getText(18)}</samp>
           <span style={{ marginInlineStart: "auto" }}>
+            {/* -cashbackAmount + */}
             {Math.max(
               0,
-              -cashbackAmount +
-                (totalPrice - userWallet) +
-                +discountController[0]
+              totalPrice - userWallet + +discountController[0],
             ).toLocaleString("en-US") + " "}
           </span>
           <CurrencySymbol />
@@ -188,7 +191,7 @@ function ItemsList({
 
   if (isMobile) {
     const items = cart.map((item, I) =>
-      MobileProductItem(item, I, editCartItem)
+      MobileProductItem(item, I, editCartItem),
     );
 
     return (
@@ -273,7 +276,7 @@ function ItemsList({
   }
 
   const items = cart.map((item, I) =>
-    DesktopProductItem(item, I, editCartItem)
+    DesktopProductItem(item, I, editCartItem),
   );
 
   return (
@@ -561,13 +564,19 @@ function CartCashback({ totalPrice, source }) {
   );
 }
 
-export function calcWalletCashback(totalPrice, cashback) {
-  if (!cashback) return 0;
+export function calcCashback(totalPrice, cashback, setting) {
+  const obj = {};
 
-  let max = +cashback.max,
-    value = +cashback.min,
-    type = cashback.type;
+  if (cashback) {
+    obj.max = +cashback.max;
+    obj.value = +cashback.min;
+    obj.type = cashback.type;
+  } else if (setting && setting.enCashBack === "true") {
+    obj.max = +setting.wallet_cash_min_order;
+    obj.value = +setting.wallet_cash_value;
+    obj.type = setting.wallet_cash_type;
+  } else return 0;
 
-  type === "percentage" && (value = (value / 100) * totalPrice);
-  return totalPrice >= max ? value : 0;
+  obj.type === "percentage" && (obj.value = (obj.value / 100) * totalPrice);
+  return totalPrice >= obj.max ? obj.value : 0;
 }

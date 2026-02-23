@@ -2,15 +2,17 @@ import getPage from "../../../translation";
 import { Link } from "react-router-dom";
 import Carousel from "../../../shared/Carousel";
 import "./index.scss";
+import { ExtraItem } from "../Departments";
 
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable import/no-anonymous-default-export */
 
-const getText = getPage("home");
+const getText = getPage("home"),
+  availableIds = [10, 11, 12, 17];
 
 export default ({ data }) => {
+  if (data.length === 0) return null;
   const items = data.map(oItem);
-
   return (
     <section
       key="occasions"
@@ -21,11 +23,33 @@ export default ({ data }) => {
 
       <Carousel
         innerItems={items}
-        customConfig={{ loop: true, scrollbar: false }}
+        customConfig={{
+          className: "d-none d-md-flex",
+          loop: true,
+          scrollbar: false,
+        }}
       />
+
+      <MobileCarousel items={data.filter((i) => availableIds.includes(i.id))} />
     </section>
   );
 };
+
+function MobileCarousel({ items }) {
+  return (
+    <>
+      <ul
+        className="list-unstyled m-0 p-0 d-grid d-md-none flex-wrap gap-3 justify-content-between"
+        style={{ gridTemplateColumns: "1fr 1fr" }}
+      >
+        {items.map((li) => (
+          <li key={li.image_url}>{oItem(li)}</li>
+        ))}
+      </ul>
+      <ExtraItem url="/all-products/?occassions=1" />
+    </>
+  );
+}
 
 function oItem({ name, image_url }) {
   return (

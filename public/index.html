@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" style="--img-aspect-ratio: 12 / 9">
   <head>
     <meta charset="utf-8" />
@@ -28,8 +28,8 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap"
       rel="stylesheet"
-      />
-      <!-- SEO -->
+    />
+    <!-- SEO -->
     <!-- https://chatgpt.com/share/68498e46-f314-8009-a02b-968230d2669b -->
     <title>Montana</title>
     <meta name="description" content="مونتانا" />
@@ -47,7 +47,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:description" content="مونتانا" />
     <meta property="og:image" content="https://montana.sa/logo.png" />
-    
+
     <!-- Required: Card type -->
     <meta name="twitter:card" content="summary_large_image" />
     <!-- Recommended: Twitter username of the website or author -->
@@ -70,12 +70,54 @@
   <body dir="rtl">
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
-    <div id="embedded-sessions"></div>
+    <div
+      id="session-container"
+      class="d-none d-flex align-items-center justify-content-center"
+      style="
+        position: fixed;
+        inset: 1rem;
+        z-index: 9;
+        background: #ffffff;
+        border: 1px solid aliceblue;
+        border-radius: 0.6rem;
+      "
+    >
+      <!-- <div
+        style="
+          position: absolute;
+          inset: 0;
+          background-color: #0002;
+        "
+      ></div> -->
+
+      <div
+        id="embedded-sessions"
+        class="container my-auto mx-3 mx-sm-auto"
+        style="
+          max-width: 750px;
+          /* background: #fff;
+          border: 1px solid aliceblue;
+          border-radius: 8px; */
+          z-index: 1;
+        "
+      ></div>
+
+      <script>
+        const container = document.getElementById("session-container"),
+          embeddedSessions = document.getElementById("embedded-sessions"),
+          dismisser = document.querySelector("#session-container > div");
+
+        // dismisser.onclick = function (ev) {
+        //   embeddedSessions.innerHTML = "";
+        //   container.classList.add("d-none");
+        // };
+      </script>
+    </div>
 
     <main class="mb-auto"></main>
-    
+
     <nav></nav>
-    
+
     <footer class="py-5 d-none d-lg-block"></footer>
 
     <aside id="animation" class="active">
@@ -110,7 +152,6 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-
 
     <script src="https://demo.myfatoorah.com/sessions/v1/session.js"></script>
     <script
