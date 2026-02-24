@@ -93,7 +93,7 @@ const getText = getPage("popup"),
 
 isMobileView && (body.id = "mobile");
 downloadDialog.id = "download-form";
-downloadDialog.className = "d-none d-md-flex";
+downloadDialog.className = "d-flex";
 body.prepend(header);
 body.prepend(downloadDialog);
 
@@ -127,7 +127,7 @@ function App() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    body.style.overflow = showPopup ? "hidden" : "auto";
+    body.style.overflowY = showPopup ? "hidden" : "visible";
   }, [location]);
 
   if (titlesLoaded === false) return null;

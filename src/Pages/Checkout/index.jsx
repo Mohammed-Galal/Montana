@@ -409,7 +409,7 @@ export function initMyFatoorah(sessionId, orderId) {
     },
   });
 
-  document.body.style.overflow = "hidden";
+  document.documentElement.style.overflowY = "hidden";
 }
 function extractPaymentId(res) {
   const url = new URL(res.redirectionUrl);

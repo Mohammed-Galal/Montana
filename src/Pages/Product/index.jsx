@@ -57,7 +57,7 @@ export default function () {
 function ProductInfo(state) {
   let quantity = 0;
 
-  const isAvailable = !!state.is_active || state.stock > 0,
+  const isAvailable = !!state.is_active && state.stock > 0,
     dispatch = useDispatch(),
     resId = useStore().getState().Restaurant.data.id,
     cartItems = useSelector((e) => e.Products).cart,
