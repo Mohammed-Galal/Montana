@@ -1,8 +1,8 @@
-﻿# Foodoma Project Review
+﻿# Montana Project Review
 
 ## 1) Project Overview
 
-Foodoma is a React + Redux single-page web app for food ordering with branch selection, product browsing, custom/special orders, cart/checkout, account management, alerts, invoices, and jobs application flows.
+Montana is a React + Redux single-page web app for food ordering with branch selection, product browsing, custom/special orders, cart/checkout, account management, alerts, invoices, and jobs application flows.
 
 The app is bilingual (Arabic/English), mobile-aware, and heavily driven by backend configuration and APIs under:
 

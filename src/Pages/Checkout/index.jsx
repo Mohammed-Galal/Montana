@@ -200,7 +200,12 @@ export default function () {
         clues.userAddresses[store.User.activeAddressIndex].tag;
     }
 
-    if (paymentMode === "COD") {
+    debugger;
+
+    if (
+      paymentMode === "COD" ||
+      (paymentMode === "myfatoorah") & (res.data.total === 0)
+    ) {
       const { data } = res,
         invoiceState = {
           ...basicOrderData,
