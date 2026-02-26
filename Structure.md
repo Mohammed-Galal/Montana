@@ -1,4 +1,4 @@
-# Foodoma Project Structure Guide
+# Montana Project Structure Guide
 
 This README explains how the project is organized and what each folder/file is responsible for.
 
