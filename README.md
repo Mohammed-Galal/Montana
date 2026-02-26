@@ -1,4 +1,4 @@
-﻿# Montana Project Review
+# Montana Project Review
 
 ## 1) Project Overview
 

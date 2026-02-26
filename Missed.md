@@ -1,0 +1,148 @@
+# API Endpoint Diff (`README.md` vs `Avail-API.md`)
+
+## Comparison Summary
+
+- `README.md` focuses on frontend-used endpoints.
+- `Avail-API.md` documents the full backend surface (134 endpoints in total).
+- Based on project source usage (plus README dynamic auth flow), **35** endpoints are used by this frontend.
+- Endpoints in `Avail-API.md` not used by this frontend: **99**.
+
+## Used Endpoints In This Project (35)
+
+- `/api/applay-job`
+- `/api/apply-coupon`
+- `/api/cancel-order`
+- `/api/cash-back`
+- `/api/change-mobile`
+- `/api/change-mobile-otp`
+- `/api/delete-address`
+- `/api/forgot-password`
+- `/api/get-addresses`
+- `/api/get-all-restaurant`
+- `/api/get-delivery-restaurants`
+- `/api/get-favorite-items`
+- `/api/getItemcategories`
+- `/api/get-orders`
+- `/api/get-restaurant-info/{slug}`
+- `/api/get-restaurant-items/{slug}`
+- `/api/get-settings`
+- `/api/getSliders`
+- `/api/get-user-notifications`
+- `/api/get-wallet-transactions`
+- `/api/job-details/{id}`
+- `/api/jobs`
+- `/api/login`
+- `/api/mark-all-notifications-read`
+- `/api/mark-one-notification-read`
+- `/api/payment-callback`
+- `/api/place-order`
+- `/api/register`
+- `/api/resend/otp`
+- `/api/save-address`
+- `/api/toggle-favorite-item`
+- `/api/update-user-data`
+- `/api/update-user-info`
+- `/api/user/reset-password`
+- `/api/user/verify-otp`
+
+## Unused Endpoints From `Avail-API.md` (99)
+
+- `/api/accept-stripe-payment`
+- `/api/address-to-coordinate`
+- `/api/change-avatar`
+- `/api/change-user-password`
+- `/api/check-ban`
+- `/api/check-cart-items-availability`
+- `/api/check-restaurant-operation-service`
+- `/api/check-running-order`
+- `/api/conversation/chat`
+- `/api/coordinate-to-address`
+- `/api/delivery/accept-to-deliver`
+- `/api/delivery/deliver-order`
+- `/api/delivery/get-completed-orders`
+- `/api/delivery/get-delivery-guy-gps-location`
+- `/api/delivery/get-delivery-orders`
+- `/api/delivery/get-single-delivery-order`
+- `/api/delivery/login`
+- `/api/delivery/pickedup-order`
+- `/api/delivery/set-delivery-guy-gps-location`
+- `/api/delivery/toggle-delivery-guy-status`
+- `/api/delivery/update-user-info`
+- `/api/files-checksum`
+- `/api/generate-otp-for-login`
+- `/api/get-all-languages`
+- `/api/get-all-restaurants-categories`
+- `/api/getAppSetting`
+- `/api/get-favorite-stores`
+- `/api/get-filtered-restaurants`
+- `/api/get-order-items`
+- `/api/get-pages`
+- `/api/get-payment-gateways`
+- `/api/get-ratable-order`
+- `/api/get-restaurant-category-slides`
+- `/api/get-restaurant-info-and-operational-status`
+- `/api/get-restaurant-info-by-id/{id}`
+- `/api/get-restaurant-info-with-favourite/{slug}`
+- `/api/get-selfpickup-restaurants`
+- `/api/get-setting/{key}`
+- `/api/get-single-item`
+- `/api/get-single-language`
+- `/api/get-single-page`
+- `/api/get-store-reviews/{slug}`
+- `/api/login-with-otp`
+- `/api/payment/handle-process-paymongo/{id}`
+- `/api/payment/paytm/{order_id}`
+- `/api/payment/process-mercado-pago/{id}`
+- `/api/payment/process-paymongo`
+- `/api/payment/process-paytm`
+- `/api/payment/process-razor-pay`
+- `/api/payment/razorpay/create-order`
+- `/api/payment/razorpay/process`
+- `/api/payment/razorpay/webhook`
+- `/api/payment/return-mercado-pago`
+- `/api/payment/verify-khalti-payment`
+- `/api/popular-geo-locations`
+- `/api/popular-locations`
+- `/api/promo-slider`
+- `/api/rate-order`
+- `/api/save-notification-token`
+- `/api/save-notification-token-no-user`
+- `/api/search-location/{query}`
+- `/api/search-restaurants`
+- `/api/send-otp`
+- `/api/send-password-reset-mail`
+- `/api/set-default-address`
+- `/api/shipping/webhook`
+- `/api/store-owner/accept-order`
+- `/api/store-owner/cancel-order`
+- `/api/store-owner/confirm-scheduled-order`
+- `/api/store-owner/dashboard`
+- `/api/store-owner/edit-item`
+- `/api/store-owner/get-all-language`
+- `/api/store-owner/get-earnings`
+- `/api/store-owner/get-inactive-items`
+- `/api/store-owner/get-menu`
+- `/api/store-owner/get-orders`
+- `/api/store-owner/get-past-orders`
+- `/api/store-owner/get-ratings`
+- `/api/store-owner/get-single-language/{language_code}`
+- `/api/store-owner/get-single-order`
+- `/api/store-owner/get-store-page`
+- `/api/store-owner/login`
+- `/api/store-owner/mark-selfpickup-order-completed`
+- `/api/store-owner/mark-selfpickup-order-ready`
+- `/api/store-owner/search-items`
+- `/api/store-owner/search-orders`
+- `/api/store-owner/send-payout-request`
+- `/api/store-owner/toggle-category-status`
+- `/api/store-owner/toggle-item-status`
+- `/api/store-owner/toggle-store-status`
+- `/api/store-owner/update-item`
+- `/api/store-owner/update-item-image`
+- `/api/stripe-redirect-capture`
+- `/api/test-payment`
+- `/api/toggle-favorite`
+- `/api/update-app-token-for-user`
+- `/api/update-tax-number`
+- `/api/verify-otp`
+- `/api/verify-password-reset-otp`
