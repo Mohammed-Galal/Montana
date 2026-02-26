@@ -4,6 +4,12 @@
   "seperator": " - ",
   "configs": [
     {
+      "name": "Confirm Payment",
+      "name_ar": "تأكيد الدفع",
+      "path": "/payment",
+      "exact": false
+    },
+    {
       "name": "Alerts",
       "name_ar": "الاشعارات",
       "path": "/alerts",

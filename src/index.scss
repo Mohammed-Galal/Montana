@@ -378,18 +378,3 @@ footer {
     justify-self: center;
   }
 }
-
-#MF3dsModal.modal {
-  display: flex !important;
-
-  & > * {
-    margin: auto !important;
-  }
-
-  & > .modal-content {
-    width: 92vw !important;
-    margin: auto !important;
-    height: 85% !important;
-    max-width: 750px;
-  }
-}

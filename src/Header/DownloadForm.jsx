@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import MobileDetect from "mobile-detect";
+
+const isMobile = new MobileDetect(window.navigator.userAgent).phone();
+
 export default function () {
   const [active, setActive] = useState(false);
+
+  if (!!isMobile) return null;
 
   return (
     <>

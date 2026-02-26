@@ -9,20 +9,8 @@ import OrderOptions from "./OrderOptions";
 import OrderInfo from "./OrderInfo";
 import "./index.scss";
 
-const config = {
-    // Add the "SessionId" you received from POST Session Endpoint.
-    // sessionId: "KWT-68814db6-7510-4005-ada9-408aae9f373c",
-
-    // MyFatoorah triggers this callback after the customer completes payment, either by submitting card details, finishing Google Pay / Apple Pay / STC Pay, or choosing any hosted payment method.
-    // callback: payment,
-
-    //Enter the div id you created in previous step.
-    containerId: "embedded-sessions",
-
-    // Default true
-    shouldHandlePaymentUrl: true,
-  },
-  sessionContainer = document.getElementById("session-container");
+const sessionContainer = document.getElementById("session-container"),
+  paymentForm = document.createElement("iframe");
 
 const getText = getPage("checkout"),
   complimentaryData = {},
@@ -199,8 +187,6 @@ export default function () {
       basicOrderData.deliveryAddress =
         clues.userAddresses[store.User.activeAddressIndex].tag;
     }
-
-    debugger;
 
     if (
       paymentMode === "COD" ||
@@ -397,21 +383,23 @@ Object.assign(complimentaryData, {
 });
 
 export function initMyFatoorah(sessionId, orderId) {
-  sessionContainer.classList.remove("d-none");
+  window.location.href =
+    "/payment?sessionId=" + sessionId + "&orderId=" + orderId;
 
-  window.myfatoorah.init({
-    ...config,
-    sessionId: sessionId,
-    callback(res) {
-      if (res.isSuccess) {
-        window.location.href = `/invoice/${orderId}?paymentId=${extractPaymentId(res)}&sessionId=${sessionId}`;
-      }
-    },
-  });
+  // paymentForm.src =
+  // "/checkoutForm.html?sessionId=" + sessionId + "&orderId=" + orderId;
 
-  document.documentElement.style.overflowY = "hidden";
+  // sessionContainer.appendChild(paymentForm);
+  // document.documentElement.style.overflowY = "hidden";
+  // sessionContainer.classList.remove("d-none");
 }
-function extractPaymentId(res) {
-  const url = new URL(res.redirectionUrl);
-  return url.searchParams.get("paymentId");
-}
+
+Object.assign(paymentForm.style, {
+  width: "100%",
+  height: "80vh",
+  maxWidth: "750px",
+  background: "rgb(255, 255, 255)",
+  padding: "1rem",
+  borderRadius: "0.4rem",
+  border: "1px solid aliceblue",
+});

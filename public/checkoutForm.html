@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #MF3dsModal.modal {
+        display: flex !important;
+      }
+
+      #MF3dsModal.modal > * {
+        margin: auto !important;
+      }
+
+      #MF3dsModal.modal > .modal-content {
+        width: 80% !important;
+        height: 100% !important;
+        margin: 0 auto !important;
+      }
+    </style>
+  </head>
+  <body>
+    <section id="embedded-sessions"></section>
+    <script src="https://demo.myfatoorah.com/sessions/v1/session.js"></script>
+
+    <script>
+      const reqURL = new URLSearchParams(window.location.search),
+        config = {
+          // Add the "SessionId" you received from POST Session Endpoint.
+          // sessionId: "KWT-68814db6-7510-4005-ada9-408aae9f373c",
+
+          // MyFatoorah triggers this callback after the customer completes payment, either by submitting card details, finishing Google Pay / Apple Pay / STC Pay, or choosing any hosted payment method.
+          // callback: payment,
+
+          //Enter the div id you created in previous step.
+          containerId: "embedded-sessions",
+
+          // Default true
+          shouldHandlePaymentUrl: true,
+        };
+
+      window.myfatoorah.init({
+        ...config,
+        sessionId: reqURL.get("sessionId"),
+        callback(res) {
+          if (res.isSuccess) {
+            window.parent.postMessage(
+              {
+                type: "Payment Confirm",
+                payload: {
+                  orderId: reqURL.get("orderId"),
+                  sessionId: reqURL.get("sessionId"),
+                  paymentId: extractPaymentId(res),
+                },
+              },
+              window.location.origin,
+            );
+          }
+        },
+      });
+
+      function extractPaymentId(res) {
+        const url = new URL(res.redirectionUrl);
+        return url.searchParams.get("paymentId");
+      }
+    </script>
+  </body>
+</html>

@@ -18,3 +18,18 @@ body {
   -webkit-overflow-scrolling: touch;
   overflow-y: auto;
 }
+
+#MF3dsModal.modal {
+  display: flex !important;
+}
+
+#MF3dsModal.modal > * {
+  margin: auto !important;
+}
+
+#MF3dsModal.modal > .modal-content {
+    width: 95% !important;
+  height: 90% !important;
+  max-width: 750px;
+  z-index: 999;
+}

@@ -28,6 +28,7 @@ import Product from "./Product";
 import Restaurant from "./Restaurant";
 import Settings from "./Settings";
 import User from "./User";
+import PaymentForm from "./PaymentForm.jsx";
 
 import Header from "../Header";
 import Nav from "../Nav";
@@ -151,6 +152,7 @@ function App() {
 
       <Routes>
         <Route path="/" caseSensitive={true} Component={HomePage} />
+        <Route path="/payment" Component={PaymentForm} />
         <Route path="/jobs/:jobId?" Component={Jobs} />
         <Route path="/faq" Component={FAQs} />
         <Route path="/restaurant" Component={Restaurant} caseSensitive={true} />
@@ -212,6 +214,7 @@ function SearchBar({ currRoute }) {
     const productId = searchParams.get("id"),
       isCustom = +searchParams.get("isCustom"),
       targetProductsContainer = products[isCustom ? "early_booking" : "data"];
+
     if (targetProductsContainer.length && productId) {
       const targetProduct = targetProductsContainer.find(
           (e) => +e.id === +productId,

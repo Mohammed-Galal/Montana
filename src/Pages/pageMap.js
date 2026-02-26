@@ -1,6 +1,7 @@
 import { getActiveLang } from "../translation.js";
 
 const ar = {
+    "/payment": ["تأكيد الدفع"],
     "/jobs": ["الوظائف"],
     "/faq": ["الأسئلة الشائعة"],
     "/restaurant": ["اختيار الفرع"],
@@ -13,10 +14,11 @@ const ar = {
     "/settings": ["الاعدادات"],
     "/design": ["اقسام مونتانا", "صمم كيكتك بنفسك"],
     "/early-booking": ["اقسام مونتانا", "الحجز المبكر"],
-    "/cart": ["الدفع", "السلة"],
-    "/checkout": ["الدفع", "تأكيد الطلب"],
+    "/cart": ["السلة"],
+    "/checkout": ["تأكيد الطلب"],
   },
   en = {
+    "/payment": ["Payment Confirmation"],
     "/jobs": ["Jobs"],
     "/faq": ["FAQs"],
     "/restaurant": ["Choose Branch"],

@@ -70,49 +70,38 @@
   <body dir="rtl">
     <noscript>You need to enable JavaScript to run this app.</noscript>
 
-    <div
+    <!-- <div
       id="session-container"
       class="d-none d-flex align-items-center justify-content-center"
-      style="
-        position: fixed;
-        inset: 1rem;
-        z-index: 999;
-        background: #ffffff;
-        border: 1px solid aliceblue;
-        border-radius: 0.6rem;
-      "
+      style="position: fixed; inset: 0; z-index: 999"
     >
-      <!-- <div
+      <div
         style="
           position: absolute;
           inset: 0;
           background-color: #0002;
-        "
-      ></div> -->
-
-      <div
-        id="embedded-sessions"
-        class="container my-auto mx-3 mx-sm-auto"
-        style="
-          max-width: 750px;
-          /* background: #fff;
-          border: 1px solid aliceblue;
-          border-radius: 8px; */
-          z-index: 1;
+          z-index: -1;
         "
       ></div>
 
       <script>
         const container = document.getElementById("session-container"),
-          embeddedSessions = document.getElementById("embedded-sessions"),
           dismisser = document.querySelector("#session-container > div");
 
-        // dismisser.onclick = function (ev) {
-        //   embeddedSessions.innerHTML = "";
-        //   container.classList.add("d-none");
-        // };
+        dismisser.onclick = function (ev) {
+          container.classList.add("d-none");
+        };
+
+        window.addEventListener("message", function (event) {
+          if (event.origin !== window.location.origin) return;
+
+          const data = event.data;
+          if (data.type === "Payment Confirm") {
+            window.location.href = `/invoice/${data.payload.orderId}?paymentId=${data.payload.paymentId}&sessionId=${data.payload.sessionId}`;
+          }
+        });
       </script>
-    </div>
+    </div> -->
 
     <main class="mb-auto"></main>
 
@@ -152,8 +141,8 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-
     <script src="https://demo.myfatoorah.com/sessions/v1/session.js"></script>
+
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"
       integrity="sha512-nnzkI2u2Dy6HMnzMIkh7CPd1KX445z38XIu4jG1jGw7x5tSL3VBjE44dY4ihMU1ijAQV930SPM12cCFrB18sVw=="
