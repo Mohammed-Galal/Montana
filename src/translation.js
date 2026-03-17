@@ -14,7 +14,7 @@ async function initLangs(callback) {
   activeLang && (lang = activeLang);
 
   file = await fetch("/assets/languages/" + langsMap[lang]).then((r) =>
-    r.json()
+    r.json(),
   );
 
   document.body.dir = lang === "العربية" ? "rtl" : "ltr";
@@ -24,7 +24,7 @@ async function initLangs(callback) {
   callback();
 }
 
-export { keys, initLangs, observeLang, getActiveLang };
+export { keys, initLangs, observeLang, getActiveLang, inlineArEn };
 
 export default function getPage(pageName) {
   return function (phraseIndex) {
@@ -42,4 +42,8 @@ function getActiveLang() {
 
 function observeLang(observer) {
   observers.push(observer);
+}
+
+function inlineArEn(arabic, english) {
+  return lang === "العربية" ? arabic : english;
 }

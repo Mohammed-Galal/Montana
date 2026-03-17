@@ -5,7 +5,7 @@ import isWebView from "../isWebview";
 export default function () {
   const [active, setActive] = useState(false);
 
-  if (!!isWebView()) return null;
+  if (isWebView()) return null;
 
   return (
     <>

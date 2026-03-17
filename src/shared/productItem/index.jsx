@@ -12,6 +12,7 @@ import InfoOutlineRoundedIcon from "@mui/icons-material/InfoOutlineRounded";
 import DirectionsRunRoundedIcon from "@mui/icons-material/DirectionsRunRounded";
 import SpaRoundedIcon from "@mui/icons-material/SpaRounded";
 import EggRoundedIcon from "@mui/icons-material/EggRounded";
+import { checkStatus } from "../../Pages/Product";
 
 const nutritionInfo = window.Nutriants,
   Nutriants = Object.keys(nutritionInfo);
@@ -40,10 +41,7 @@ function ProductItem({ item, I }) {
 
   const store = S.getState(),
     settings = store.settings.data,
-    isActive =
-      settings.enstock === "true"
-        ? !!item.is_active & (item.stock > 0)
-        : !!item.is_active,
+    { isAvailable, status } = checkStatus(item, settings),
     priceType = isArabic
       ? priceTypes[item.price_type]
       : item.price_type.replace(/_/g, " ").toUpperCase(),
@@ -138,7 +136,7 @@ function ProductItem({ item, I }) {
       }}
       className={
         "d-flex flex-column position-relative product-item px-3 py-4 gap-2" +
-        (isActive ? "" : " disabled")
+        (isAvailable ? "" : " disabled")
       }
     >
       <div className="align-items-center d-flex justify-content-between">
@@ -219,7 +217,7 @@ function ProductItem({ item, I }) {
         </Link>
       </div>
 
-      {isActive ? (
+      {isAvailable ? (
         <div className="actions gap-3 mt-2">
           <button
             className="align-items-center btn d-flex justify-content-center p-0"
@@ -256,7 +254,7 @@ function ProductItem({ item, I }) {
             width: "100%",
           }}
         >
-          {getText(5)}
+          {status}
         </button>
       )}
     </div>

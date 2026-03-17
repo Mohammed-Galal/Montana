@@ -1,4 +1,4 @@
-import getPage from "../../translation";
+import getPage, { inlineArEn } from "../../translation";
 // eslint-disable-next-line react-hooks/exhaustive-deps
 /* eslint-disable import/no-anonymous-default-export */
 import { useEffect, useRef, useState } from "react";
@@ -6,8 +6,7 @@ import { useDispatch, useSelector, useStore } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import productItem from "../../shared/productItem";
 import Carousel from "../../shared/Carousel";
-// import NXT from "../../icons/NXT";
-// import Cart from "../../icons/Cart";
+import { ordinaryCategories } from "../All_Products";
 import Minus from "../../icons/Minus";
 import Plus from "../../icons/Plus";
 import { getActiveLang } from "../../translation";
@@ -59,10 +58,7 @@ function ProductInfo(state) {
 
   const store = useStore().getState(),
     settings = store.settings.data,
-    isAvailable =
-      settings.enstock === "true"
-        ? !!state.is_active & (state.stock > 0)
-        : !!state.is_active,
+    { isAvailable, status } = checkStatus(state, settings),
     dispatch = useDispatch(),
     resId = store.Restaurant.data.id,
     cartItems = useSelector((e) => e.Products).cart,
@@ -71,7 +67,6 @@ function ProductInfo(state) {
     [load, update] = useState(false),
     // [quantity, setQuntity] = useState(1),
     selectedAddons = useRef(new Set()).current;
-  debugger;
 
   useEffect(() => {
     Alert &&
@@ -203,14 +198,7 @@ function ProductInfo(state) {
             className="flag d-flex align-items-center gap-1"
             style={initStateStyle(isAvailable)}
           >
-            {!!isAvailable ? (
-              <>
-                {getText(4)}
-                {/* <b>{state.stock}</b> */}
-              </>
-            ) : (
-              getText(5)
-            )}
+            {status}
           </span>
           {+state.price < old_price && discountFlag}
         </div>
@@ -485,6 +473,21 @@ function initStateStyle(isAvailable) {
   if (!isAvailable) {
     result.backgroundColor = "#dc35452b";
     result.color = "var(--bs-danger)";
+  }
+
+  return result;
+}
+
+export function checkStatus(item, settings) {
+  const result = { isAvailable: true, status: getText(4) },
+    isOrdinary = ordinaryCategories.includes(item.item_category_id);
+
+  if (isOrdinary && settings.enstock === "true") {
+    result.isAvailable = !!item.is_active && item.stock > 0;
+    !result.isAvailable && (result.status = getText(5));
+  } else if (!item.is_active) {
+    result.isAvailable = false;
+    result.status = inlineArEn("غير متوفر", "unavailable");
   }
 
   return result;

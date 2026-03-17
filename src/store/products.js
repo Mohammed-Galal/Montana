@@ -18,6 +18,7 @@ const slug = window.localStorage.getItem("slug"),
   ),
   cartStorage = JSON.parse(window.localStorage.getItem("cartItems")) || {};
 
+  
 const Products = {
     name: "products",
     initialState: {

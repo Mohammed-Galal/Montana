@@ -8,7 +8,7 @@ import getPage from "../translation";
 import Box from "@mui/material/Box";
 import Skeleton from "@mui/material/Skeleton";
 
-const ordinaryCategories = [1, 2, 3, 4, 5, 6, 7];
+export const ordinaryCategories = [1, 2, 3, 4, 5, 6, 7];
 
 const miniCategories = staticCategories.map((i) => i.title),
   getText = getPage("allProducts"),

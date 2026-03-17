@@ -74,21 +74,18 @@ export default function (props) {
   discountAmount &&
     (clues.discount += Math.min(subTotal, Math.abs(discountAmount)));
 
-  const taxes =
-    settings.taxApplicable === "true"
-      ? calcTaxes(
-          totalPrice + delivery_charges - clues.discount,
-          +settings.taxPercentage,
-        )
-      : 0;
-
   clues.discount += wallet_balance;
 
-  const totalBeforeDiscount = subTotal + taxes + delivery_charges;
   const deliveryTargetOption = delivery ? "enCODonDelivery" : "enCODonSF";
-  totalPrice = totalPrice - clues.discount;
+  totalPrice = Math.max(0, totalPrice - clues.discount);
 
-  totalPrice += delivery_charges;
+  const taxes =
+      settings.taxApplicable === "true"
+        ? calcTaxes(totalPrice, +settings.taxPercentage)
+        : 0,
+    totalBeforeDiscount = subTotal + delivery_charges + taxes;
+
+  totalPrice += delivery_charges + taxes;
   if (totalPrice === 0) reqBody.method = "COD";
 
   return (
@@ -101,7 +98,8 @@ export default function (props) {
       <div>
         {getText(19)}
         <span style={{ color: "var(--primary)", fontWeight: "600" }}>
-          {subTotal} <CurrencySymbol />
+          {subTotal + (settings.enpriceincludestax === "true" ? -taxes : 0)}{" "}
+          <CurrencySymbol />
         </span>
       </div>
 
@@ -149,11 +147,11 @@ export default function (props) {
         </span>
       </div>
 
-      {taxes > 0 && (
+      {settings.taxApplicable === "true" && (
         <div>
           {getText(25)}({settings.taxPercentage}%)
           <span>
-            {taxes.toLocaleString("en-US")} <CurrencySymbol />
+            {Math.abs(taxes).toLocaleString("en-US")} <CurrencySymbol />
           </span>
         </div>
       )}
@@ -180,8 +178,7 @@ export default function (props) {
           </sub>
         )}
         <span>
-          {Math.max(0, totalPrice + taxes).toLocaleString("en-US")}{" "}
-          <CurrencySymbol />
+          {totalPrice.toLocaleString("en-US")} <CurrencySymbol />
         </span>
       </div>
 
@@ -305,7 +302,7 @@ function extractData(i, restaurant_id) {
   };
 }
 
-function calcTaxes(price, percentage) {
+function calcTaxes(price, percentage, taxIncluded) {
   return (percentage / 100) * price;
 }
 
@@ -314,7 +311,7 @@ function isWithinWorkingHours({ schedule_data, is_schedulable }) {
     const currTime = new Date(
         new Date().toLocaleString("en-SA", { timeZone: "Asia/Riyadh" }),
       ),
-      day = days[currTime.getDay()];
+      day = new RegExp(currTime.getDay(), "i");
 
     const workingHours = JSON.parse(schedule_data),
       targetDay = Object.keys(workingHours).find((d) => day.test(d));

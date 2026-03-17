@@ -15,9 +15,9 @@ if (activeVer !== version && window) {
 
 window.Nutriants = {
   caffeine: {
-    en: "caffeine",
-    ar: "كافيين",
-    icon: "☕",
+    en: "Minutes of walking",
+    ar: "دقائق المشي",
+    icon: "🚶‍♂️‍➡️",
   },
   calcium: {
     en: "calcium",
