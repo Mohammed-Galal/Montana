@@ -26,6 +26,7 @@
 
     <script>
       const reqURL = new URLSearchParams(window.location.search),
+        appRedirect = reqURL.get("appRedirect"),
         config = {
           // Add the "SessionId" you received from POST Session Endpoint.
           // sessionId: "KWT-68814db6-7510-4005-ada9-408aae9f373c",
@@ -45,13 +46,23 @@
         sessionId: reqURL.get("sessionId"),
         callback(res) {
           if (res.isSuccess) {
+            const paymentId = extractPaymentId(res);
+            if (appRedirect) {
+              window.location.href = buildRedirectUrl({
+                appRedirect,
+                orderId: reqURL.get("orderId"),
+                paymentId,
+                sessionId: reqURL.get("sessionId"),
+              });
+              return;
+            }
             window.parent.postMessage(
               {
                 type: "Payment Confirm",
                 payload: {
                   orderId: reqURL.get("orderId"),
                   sessionId: reqURL.get("sessionId"),
-                  paymentId: extractPaymentId(res),
+                  paymentId,
                 },
               },
               window.location.origin,
@@ -63,6 +74,14 @@
       function extractPaymentId(res) {
         const url = new URL(res.redirectionUrl);
         return url.searchParams.get("paymentId");
+      }
+
+      function buildRedirectUrl({ appRedirect, orderId, paymentId, sessionId }) {
+        const target = new URL(appRedirect);
+        target.searchParams.set("orderId", orderId || "");
+        target.searchParams.set("paymentId", paymentId || "");
+        target.searchParams.set("sessionId", sessionId || "");
+        return target.toString();
       }
     </script>
   </body>

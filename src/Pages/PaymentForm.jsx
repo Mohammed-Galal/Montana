@@ -30,13 +30,19 @@ const config = {
 
 function initPaymentForm() {
   const reqURL = new URLSearchParams(window.location.search);
+  const appRedirect = reqURL.get("appRedirect");
 
   window.myfatoorah.init({
     ...config,
     sessionId: reqURL.get("sessionId"),
     callback(res) {
       if (res.isSuccess) {
-        window.location.href = `/invoice/${reqURL.get("orderId")}?paymentId=${extractPaymentId(res)}&sessionId=${reqURL.get("sessionId")}`;
+        window.location.href = buildRedirectUrl({
+          appRedirect,
+          orderId: reqURL.get("orderId"),
+          paymentId: extractPaymentId(res),
+          sessionId: reqURL.get("sessionId"),
+        });
         // window.parent.postMessage(
         //   {
         //     type: "Payment Confirm",
@@ -56,4 +62,15 @@ function initPaymentForm() {
 function extractPaymentId(res) {
   const url = new URL(res.redirectionUrl);
   return url.searchParams.get("paymentId");
+}
+
+function buildRedirectUrl({ appRedirect, orderId, paymentId, sessionId }) {
+  if (!appRedirect)
+    return `/invoice/${orderId}?paymentId=${paymentId}&sessionId=${sessionId}`;
+
+  const target = new URL(appRedirect);
+  target.searchParams.set("orderId", orderId || "");
+  target.searchParams.set("paymentId", paymentId || "");
+  target.searchParams.set("sessionId", sessionId || "");
+  return target.toString();
 }
